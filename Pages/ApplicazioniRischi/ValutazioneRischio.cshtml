@@ -1,0 +1,236 @@
+﻿@page
+@model SRA.Pages.ApplicazioniRischi.ValutazioneRischioModel
+@{
+}
+
+<script src="~/lib/tinymce/tinymce.min.js" referrerpolicy="origin"></script>
+
+<style>
+    th, td {
+        padding: 15px;
+    }
+</style>
+
+<h2>Applicazione: @Model.VW_RecordApplicazioneRischio.NomeApplicazione</h2>
+<h2>Rischio Associato: @Model.VW_RecordApplicazioneRischio.NomeRischio</h2>
+
+
+<br />
+<div id="mostramotivazione" style="display: block;">
+    @Html.Raw(Model.RecordApplicazioneRischio.Motivazione)
+    <button type="submit" class="bottone bottone1" onclick="mostraDettagli()">Modifica</button>
+</div>
+
+<div id="bloccotinyurl" style="display: none;">
+    Motivazione
+    <form method="post">
+        <input type="hidden" asp-for="@Model.RecordApplicazioneRischio.IDApplicazione" value="@Model.RecordApplicazioneRischio.IDApplicazione" />
+        <input type="hidden" asp-for="@Model.RecordApplicazioneRischio.IDRischio" value="@Model.RecordApplicazioneRischio.IDRischio" />
+
+        <textarea id="htmlmotivazione" name="motivazione">
+            @Model.RecordApplicazioneRischio.Motivazione
+        </textarea>
+        <br /><br />
+        <input type="submit" class="bottone bottone1" value="Salva" asp-page-handler="SalvaMotivazione" /> &nbsp; <button type="button" class="bottone bottone1" onclick="mostraDettagli()">Annulla</button>
+    </form>
+
+
+</div>
+
+
+
+<table>
+    <tbody>
+        <tr>
+            <td colspan="2" align="center">Valutazione: @Model.RecordApplicazioneRischio.Risk_Rating</td>
+        </tr>
+        <tr>
+            <td>Probabilità: @Model.RecordApplicazioneRischio.Likelihood</td>
+            <td>Impatto: @Model.RecordApplicazioneRischio.Impact</td>
+        </tr>
+    </tbody>
+</table>
+<form method="post" asp-page-handler="SalvaValutazione">
+
+
+    <table tblvalutazionerischi>
+        <tr>
+            <td colspan="2" align="center"><h2>Probabilità</h2></td>
+        </tr>
+        <tr>
+            <td>Ease of discovery</td>
+            <td>
+                <input title="Stima della facilità con cui è possibile scoprire la vulnerabilità. 1=quasi impossibile, 5=facilmente possibile, 9=esistenza di meccanismi automatici"
+                       asp-for="@Model.RecordApplicazioneRischio.Ease_Discovery" />
+                <span asp-validation-for="@Model.RecordApplicazioneRischio.Ease_Discovery" style="color:red"></span>
+            </td>
+            <td>Stima della facilità con cui è possibile scoprire la vulnerabilità. 1=quasi impossibile, 5=facilmente possibile, 9=esistenza di meccanismi automatici</td>
+        </tr>
+        <tr>
+            <td>Ease of exploit</td>
+            <td>
+                <input title="Stima della possibilità di utilizzare la vulnerabilità. 1=possibilità teorica, 5=facilmente utilizzabile, 9=esistenza di automatismi per lo sfruttamento della vulnerabilità"
+                       asp-for="@Model.RecordApplicazioneRischio.Ease_Exploit" />
+                <span asp-validation-for="@Model.RecordApplicazioneRischio.Ease_Exploit" style="color:red"></span>
+            <td>Stima della possibilità di utilizzare la vulnerabilità. 1=possibilità teorica, 5=facilmente utilizzabile, 9=esistenza di automatismi per lo sfruttamento della vulnerabilità</td>
+            </td>
+        </tr>
+        <tr>
+            <td>Awareness</td>
+            <td>
+                <input title="Stima della consapevolezza degli Agenti relativamente alla vulnerabilità. 1=Vulnerabilità sconosciuta, 5=vulnerabilità ovvia, 9=di pubblico dominio"
+                       asp-for="@Model.RecordApplicazioneRischio.Awareness" />
+                <span asp-validation-for="@Model.RecordApplicazioneRischio.Awareness" style="color:red"></span>
+            </td>
+            <td>Stima della consapevolezza degli Agenti relativamente alla vulnerabilità. 1=Vulnerabilità sconosciuta, 5=vulnerabilità ovvia, 9=di pubblico dominio</td>
+        </tr>
+        <tr>
+            <td>Intrusion detection</td>
+            <td>
+                <input title="Stima della capacità di rivelare lo sfruttamento della vulnerabilità. 1=evento rivelato e automaticamente notificato, 5=evento registrato ma non controllato, 9=non rivelato e non registrato"
+                       asp-for="@Model.RecordApplicazioneRischio.Intrusion_Detection" />
+                <span asp-validation-for="@Model.RecordApplicazioneRischio.Intrusion_Detection" style="color:red"></span>
+            </td>
+            <td>Stima della capacità di rivelare lo sfruttamento della vulnerabilità. 1=evento rivelato e automaticamente notificato, 5=evento registrato ma non controllato, 9=non rivelato e non registrato</td>
+        </tr>
+
+        <tr>
+            <td colspan="2" align="center"><h2>Impatto</h2></td>
+        </tr>
+        <tr>
+            <td>Loss of Confidentiality</td>
+            <td>
+                <input title="Stima della quantità dei dati esposti ad accesso non autorizzato e della loro importanza. 1=pochi dati non sensibili coinvolti, 4=pochi dati ma sensibili, 6=molti dati ma non importanti, 9=perdita estesa di dati molto importanti"
+                       asp-for="@Model.RecordApplicazioneRischio.Loss_Confidentiality" />
+                <span asp-validation-for="@Model.RecordApplicazioneRischio.Loss_Confidentiality" style="color:red"></span>
+            </td>
+            <td>Stima della quantità dei dati esposti ad accesso non autorizzato e della loro importanza. 1=pochi dati non sensibili coinvolti, 4=pochi dati ma sensibili, 6=molti dati ma non importanti, 9=perdita estesa di dati molto importanti</td>
+        </tr>
+        <tr>
+            <td>Loss of Integrity</td>
+            <td>
+                <input title="Stima della quantità di dati corrotti e della complessità della corruzione del dato. 1=minima quantità di dati leggermente corrotti, 4=minima quantità di dati molto corrotti,  6=grande quantità di dati leggermente corrotti, 9=grande quantità di dati molto corrotti"
+                       asp-for="@Model.RecordApplicazioneRischio.Loss_Integrity" />
+                <span asp-validation-for="@Model.RecordApplicazioneRischio.Loss_Integrity" style="color:red"></span>
+            </td>
+            <td>Stima della quantità di dati corrotti e della complessità della corruzione del dato. 1=minima quantità di dati leggermente corrotti, 4=minima quantità di dati molto corrotti,  6=grande quantità di dati leggermente corrotti, 9=grande quantità di dati molto corrotti</td>
+        </tr>
+        <tr>
+            <td>Loss of Availability</td>
+            <td>
+                <input title="Stima dell’importanza dell’interruzione di servizio. 1= Servizio non critico di piccole dimensioni, 5=Servizio non critico di grandi dimensioni, 6 servizio critico di piccole dimensioni, 9=servizio critico di grandi dimensioni"
+                       asp-for="@Model.RecordApplicazioneRischio.Loss_Availability" />
+                <span asp-validation-for="@Model.RecordApplicazioneRischio.Loss_Availability" style="color:red"></span>
+            </td>
+            <td>Stima dell’importanza dell’interruzione di servizio. 1= Servizio non critico di piccole dimensioni, 5=Servizio non critico di grandi dimensioni, 6 servizio critico di piccole dimensioni, 9=servizio critico di grandi dimensioni</td>
+        </tr>
+        <tr>
+            <td>Loss Accountability</td>
+            <td>
+                <input title="Stima della capacità di tracciare l’evento assegnandone la responsabilità. 1=evento completamente tracciato, 5=evento tracciato ma no in tutti i casi, 9=evento completamente anonimo"
+                       asp-for="@Model.RecordApplicazioneRischio.Loss_Accountability" />
+                <span asp-validation-for="@Model.RecordApplicazioneRischio.Loss_Accountability" style="color:red"></span>
+            </td>
+            <td>Stima della capacità di tracciare l’evento assegnandone la responsabilità. 1=evento completamente tracciato, 5=evento tracciato ma no in tutti i casi, 9=evento completamente anonimo</td>
+
+        </tr>
+        <tr>
+            <td>Financial Damage</td>
+            <td>
+                <input title="Stima delle predite economiche indotte dall’evento. 1=minore del costo per eliminare la vulnerabilità, 4=grande perdita economica, 6=grande perdita economica, 9=possibile bancarotta"
+                       asp-for="@Model.RecordApplicazioneRischio.Financial_Damage" />
+                <span asp-validation-for="@Model.RecordApplicazioneRischio.Financial_Damage" style="color:red"></span>
+            </td>
+            <td>Stima delle predite economiche indotte dall’evento. 1=minore del costo per eliminare la vulnerabilità, 4=grande perdita economica, 6=grande perdita economica, 9=possibile bancarotta</td>
+        </tr>
+        <tr>
+            <td>Reputation Damage</td>
+            <td>
+                <input title="Stima della perdita di reputazione e della risonanza dell’evento. 1=Minima risonanza, 4=grande risonanza,  6=perdita di credibilità del settore, 9=risonanza nazionale e perdita completa di credibilità"
+                       asp-for="@Model.RecordApplicazioneRischio.Reputation_Damage" />
+                <span asp-validation-for="@Model.RecordApplicazioneRischio.Reputation_Damage" style="color:red"></span>
+            </td>
+            <td>Stima della perdita di reputazione e della risonanza dell’evento. 1=Minima risonanza, 4=grande risonanza,  6=perdita di credibilità del settore, 9=risonanza nazionale e perdita completa di credibilità</td>
+        </tr>
+        <tr>
+            <td>Non-compliance</td>
+            <td>
+                <input title="Stima dell’illegalità in cui ci si trova a valle del verificarsi dell’evento. 1=Violazione minima, 5= ampia violazione della normativa, 9=violazione di ampio profilo con rilievi penali"
+                       asp-for="@Model.RecordApplicazioneRischio.Non_Compliance" />
+                <span asp-validation-for="@Model.RecordApplicazioneRischio.Non_Compliance" style="color:red"></span>
+            </td>
+            <td>Stima dell’illegalità in cui ci si trova a valle del verificarsi dell’evento. 1=Violazione minima, 5= ampia violazione della normativa, 9=violazione di ampio profilo con rilievi penali</td>
+        </tr>
+        <tr>
+            <td>Privacy Violation</td>
+            <td>
+                <input title="Stima della quantità di individui coinvolte dalla perdita di informazioni personali. 1=singolo individuo, 4=centinaia di individui, 6=migliaia di individui, 9=milioni di individui"
+                       asp-for="@Model.RecordApplicazioneRischio.Privacy_Violation" />
+                <span asp-validation-for="@Model.RecordApplicazioneRischio.Privacy_Violation" style="color:red"></span>
+            </td>
+            <td>Stima della quantità di individui coinvolte dalla perdita di informazioni personali. 1=singolo individuo, 4=centinaia di individui, 6=migliaia di individui, 9=milioni di individui</td>
+        </tr>
+    </table>
+    <br />
+    <div style="position: relative;">
+        <p title="La valutazione sarà considerata definitiva e la precedente storicizzata"><b>Valutazione valida</b> <input id="valutazionevalida" asp-for="@Model.RecordApplicazioneRischio.ValutazioneValida" /></p>
+        <div id="bloccomisura" style="display: none; position: absolute; top: 0; left: 20%;">
+            <select asp-for="@Model.MisuraApplicata" asp-items="@Model.ListaMisure" class="form-control"></select>
+        </div>
+    </div>
+    <br />
+    <div>
+        <input type="hidden" asp-for="@Model.RecordApplicazioneRischio.IDApplicazione" value="@Model.RecordApplicazioneRischio.IDApplicazione" />
+        <input type="hidden" asp-for="@Model.RecordApplicazioneRischio.IDRischio" value="@Model.RecordApplicazioneRischio.IDRischio" />
+        <button type="submit" class="bottone bottone1">Salva</button>
+        <a class="bottone bottone1" asp-page="./IndexApplicazioniRischi">Annulla</a>
+
+    </div>
+</form>
+
+@section Scripts {
+    <script>
+         $(document).ready(function () {
+                $('#tblvalutazionerischi').DataTable({
+                    // Opzioni di configurazione
+                    paging: false,          // Abilita la paginazione
+                    searching: false,       // Abilita la ricerca
+                    ordering: false,        // Abilita l'ordinamento delle colonne
+                }
+                );
+            });
+
+                $(document).ready(function() {
+                $('#valutazionevalida').change(function() {
+                    if ($(this).is(':checked')) {
+                        $('#bloccomisura').show();
+                    } else {
+                        $('#bloccomisura').hide();
+                    }
+                });
+            });
+
+
+        function mostraDettagli() {
+                var x = document.getElementById("bloccotinyurl");
+                if (x.style.display === "none") {
+                    x.style.display = "block";
+                } else {
+                    x.style.display = "none";
+                }
+                var y = document.getElementById("mostramotivazione");
+            if (y.style.display === "none") {
+                y.style.display = "block";
+            } else {
+                y.style.display = "none";
+            }
+            }
+
+            tinymce.init({
+                language: 'it',
+                language_url: '/lib/tinymce/langs/it.js',
+                selector: '#htmlmotivazione',
+                plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount checklist autoresize'
+            });
+    </script>
+}

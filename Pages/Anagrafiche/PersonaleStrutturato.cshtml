@@ -1,0 +1,15 @@
+﻿@page
+@model SRA.Pages.Anagrafiche.PersonaleStrutturatoModel
+@{
+}
+
+
+<div class="text-center">
+    <form asp-page-handler="Esporta" method="post">
+
+        <input type="hidden" />
+        <input asp-for="@Model.DataAnalisi" name="data" value="@Model.DataAnalisi" /><br /><br />
+        <button type="submit" class="bottone bottone1">Esporta</button>
+
+    </form>
+</div>

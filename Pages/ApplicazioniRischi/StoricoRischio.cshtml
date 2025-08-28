@@ -1,0 +1,99 @@
+﻿@page
+@model SRA.Pages.ApplicazioniRischi.StoricoRischioModel
+@using ScottPlot
+@{
+}
+<style>
+    .centered {
+        text-align: center;
+        vertical-align: middle;
+    }
+</style>
+
+<div>
+    <h1>Applicazione: @Model.Applicazione.Nome <br /> Rischio: @Model.Rischio.Nome</h1>
+</div>
+<br />
+<div>
+    <p><b>Motivazione</b><br /> @Html.Raw(Model.ListaStorico.Last().Motivazione)</p>
+</div>
+<table>
+    <tr>
+        <td class="centered">@Html.Raw(Model.GraficoLikelihoodUrl)</td>
+        <td class="centered">@Html.Raw(Model.GraficoImpactUrl)</td>
+    </tr>
+    <tr>
+        <td colspan="2" class="centered">@Html.Raw(Model.GraficoRiskRatingUrl)</td>
+    </tr>
+    
+</table>
+
+
+<div>
+    <table id="tblapplicazionirischi" class=" display table table-hover table-striped table-bordered table-sm">
+        <thead>
+            <tr>
+               
+                <th>
+                        @Html.DisplayNameFor(model => model.ListaStorico[0].Likelihood)
+                </th>
+                <th>
+                        @Html.DisplayNameFor(model => model.ListaStorico[0].Impact)
+                </th>
+                <th>
+                        @Html.DisplayNameFor(model => model.ListaStorico[0].Risk_Rating)
+                </th>
+                <th>
+                        @Html.DisplayNameFor(model => model.ListaStorico[0].DataUltimaModifica)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ListaStorico[0].NomeMisura)
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.ListaStorico)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Likelihood)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Impact)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Risk_Rating)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DataUltimaModifica)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.NomeMisura)
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<br />
+<p><a href="/ApplicazioniRischi/IndexApplicazioniRischi" class="bottone bottone1">Torna</a></p>
+
+
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+               $('#tblapplicazionirischi').DataTable({
+                   // Opzioni di configurazione
+                   paging: false,          // Abilita la paginazione
+                   searching: false,       // Abilita la ricerca
+                   ordering: false,        // Abilita l'ordinamento delle colonne
+                  columnDefs: [
+                     { orderable: false, targets: [0, 1, 2, 3]},  // Indici delle colonne da escludere dall'ordinamento
+                     { type: 'date-euro', targets: 3 }
+                  ]
+               }
+               );
+           });
+    </script>
+}

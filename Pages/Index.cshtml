@@ -1,0 +1,38 @@
+﻿@page
+@using SRA.Models
+
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<div class="container-fluid">
+    <div class="row align-items-start">
+        <div class="col text-center p-5">
+            <div>  <h2>Censimento IT</h2></div>
+
+            <div class="row"><a href="./Applicazioni/IndexApplicazioni" class="bottone bottone1">Applicazioni</a></div><br />
+            <div class ="row"><a href="./Moduli/IndexModuli" class="bottone bottone1">Moduli</a></div><br />
+            <div class="row"><a href="./Basidati/IndexBasidati" class="bottone bottone1">Basi di Dati</a></div><br />
+            <div class="row"><a href="./Aziende/IndexAziende" class="bottone bottone1">Aziende</a></div><br />
+            <div class="row"><a href="./Sistemi/IndexSistemi" class="bottone bottone1">Sistemi</a></div><br />
+            <div class="row"><a href="./DBMSs/IndexDBMSs" class="bottone bottone1">DBMS</a></div><br />
+            
+        </div>
+        <div class="col text-center p-5">
+            <div class="row"><h2>Attività</h2></div>
+            <div class="row"><a href="./Attività/IndexElencoAttività" class="bottone bottone1">Elenco Attività</a></div><br />
+            <div class="row"><a href="./Stampe/IndexStampe" class="bottone bottone1">Stampe</a></div>
+
+
+        </div>
+        <div class="col text-center p-5">
+            <div class="row"><h2>Analisi dei Rischi</h2></div>
+            <div class="row"><a href="./Rischi/IndexRischi" class="bottone bottone1">Rischi</a></div><br />
+            <div class="row"><a href="./TipiRischio/IndexTipiRischio" class="bottone bottone1">Tipologie di Rischio</a></div><br />
+            <div class="row"><a href="./ApplicazioniRischi/IndexApplicazioniRischi" class="bottone bottone1">Valutazione dei Rischi associati</a></div><br />
+            <div class="row"><a href="./Misure/IndexMisure" class="bottone bottone1">Contromisure</a></div><br />
+            <div class="row"><a href="./ImpattoMisure/IndexImpattoMisure" class="bottone bottone1"> Impatto Contromisure</a></div>
+
+        </div>
+    </div>

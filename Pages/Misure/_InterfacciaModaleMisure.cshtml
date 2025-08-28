@@ -1,0 +1,48 @@
+﻿@model SRA.Models.InputMisureModel
+<!-- Modal -->
+<div class="modal fade" id="mod-stato" tabindex="-1" role="dialog" aria-labelledby="addContactLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addContactLabel">Aggiungi/Modifica Misura</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    
+                </button>
+            </div>
+
+
+            <div class="modal-body">
+                <form id="idnuovaMisura" asp-page-handler="AggModMisura" method="post">
+                    Nome Misura<br />
+                    <input asp-for="@Model.Misura.Nome" class="form-control" />
+                    <br />
+                    Descrizione <br />
+                    <input asp-for="@Model.Misura.Descrizione" class="form-control" />
+                    <br />
+                    Data Attivazione<br />
+                    <input asp-for="@Model.Misura.DataAttivazione" class="form-control" />
+                    <br />
+                    Data Disattivazione <br />
+                    <input asp-for="@Model.Misura.DataDisattivazione" class="form-control" />
+                    <br />
+                    <input type="hidden" asp-for="Misura.ID" value="@Model.Misura.ID" /><br /><br />
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
+                    <button type="submit" class="bottone bottone1" data-save="modal">Salva</button>
+                </form>
+
+            </div>
+            <br />
+
+            <div class="modal-footer">
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+
+
+
+</script>

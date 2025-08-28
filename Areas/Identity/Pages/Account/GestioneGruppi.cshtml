@@ -1,0 +1,90 @@
+﻿@page
+@model SRA.Areas.Identity.Pages.Account.GestioneGruppiModel
+@{
+    Layout = "/Areas/Identity/Pages/Account/_LayoutGestioneIdentity.cshtml";
+    ViewData["Title"] = "Gestione Gruppi";
+}
+
+@if (!String.IsNullOrEmpty(Model.StatusMessage))
+{
+    <p style="color:red">@Model.StatusMessage </p>
+}
+
+<div class="row">
+    <div class="col-md-6">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        Nome Gruppo
+                    </th>
+                    <th>
+                        Gruppo assegnato
+                    </th>
+                    <th>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.ListaGruppiMgt.Count() > 0)
+                {
+                    @for (var i = 0; i < Model.ListaGruppiMgt.Count(); i++)
+                    {
+                        <tr>
+                            <td>
+                                @Model.ListaGruppiMgt[i].NomeGruppo
+                            </td>
+                            <td>
+                                @Model.ListaGruppiMgt[i].Descrizione
+                            </td>
+                            <td>
+                                @if (Model.ListaGruppiMgt[i].GruppoAssegnato)
+                                {
+                                    <p>Gruppo assegnato</p>
+                                }
+                                else
+                                {
+                                    <p>Gruppo non assegnato</p>
+                                }
+                            </td>
+                            <td>
+                                @if (Model.ListaGruppiMgt[i].GruppoAssegnato)
+                                {
+                                    <p></p>
+                                }
+                                else
+                                {
+                                    <form method="post">
+                                        <input type="hidden" class="form-control" value="@Model.ListaGruppiMgt[i].NomeGruppo"  name="nomegruppo" />
+                                        <input asp-page-handler="EliminaGruppo" method="post" class="bottone bottone1" type="submit" value="Elimina" />
+                                    </form>
+                                }
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+<p>Aggiungi un Gruppo</p>
+<div class="row">
+    <div class="col-md-3">
+        <form method="post">
+            <div class="form-group">
+                Nome gruppo <input asp-for="inputGruppo.NomeGruppodaCreare" class="form-control" name="nomeGruppo" /> <br /> 
+                Descrizione <input asp-for="inputGruppo.DescrizioneGruppodaCreare" class="form-control" name="descrizioneGruppo" />
+                <span asp-validation-for="inputGruppo.NomeGruppodaCreare" class="text-danger"></span>
+                <span asp-validation-for="inputGruppo.DescrizioneGruppodaCreare" class="text-danger"></span>
+            </div>
+            <br />
+            <div>
+                <p>
+                    <button asp-page-handler="CreaGruppo" type="submit" class="bottone bottone1">Crea gruppo</button>
+                </p>
+            </div>
+        </form>
+    </div>
+</div>

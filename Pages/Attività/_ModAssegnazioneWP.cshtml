@@ -1,0 +1,77 @@
+﻿@model SRA.Models.AttivitaWPInputModel
+
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="mod-wp" tabindex="-1" role="dialog" aria-labelledby="largeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addContactLabel">Aggiungi/Modifica Work Package</h5><br /><br />
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    
+                </button>
+            </div>
+            
+
+            <div class="modal-body">
+                <h3>@Model.RigaAttivitaWP.NomeAttività</h3>
+
+                <form id="idnuovowp" asp-page-handler="ModAssegnazioneWP" method="post">
+                    <input type="hidden" asp-for="@Model.RigaAttivitaWP.IDWP" value="@Model.RigaAttivitaWP.IDWP" />
+                    <input type="hidden" asp-for="@Model.RigaAttivitaWP.IDAttività" value="@Model.RigaAttivitaWP.IDAttività" />
+                    <input type="hidden" asp-for="@Model.RigaAttivitaWP.DataUltimaNotifica" value="@Model.RigaAttivitaWP.DataUltimaNotifica" />
+                    <p>
+                        Nome Work Package <br />
+                        <input asp-for="@Model.RigaAttivitaWP.Nome" value="@Model.RigaAttivitaWP.Nome" id="nomeInput" required title="Il nome è obbligatorio" class="form-control w-auto" />
+                    </p>
+                    <p>
+                        Descrizione <br />
+                        <span asp-validation-for="@Model.RigaAttivitaWP.Descrizione" class="text-danger"></span>
+                        <textarea asp-for="@Model.RigaAttivitaWP.Descrizione" rows="4" cols="60" style="resize: vertical;" id="descrizione" required title="La descrizione è obbligatoria" spellcheck="true"></textarea>
+                        </p>
+                    <p>
+                        Da:<br />
+                        <input asp-for="@Model.RigaAttivitaWP.DataInizio" value="@Model.RigaAttivitaWP.DataInizio.ToString("yyyy-MM-dd")" id="datainizioInput" class="form-control w-auto" />
+                    </p>
+                    <p>
+                        A:<br />
+                        <input asp-for="@Model.RigaAttivitaWP.DataFine" value="@Model.RigaAttivitaWP.DataFine.ToString("yyyy-MM-dd")" id="datafineInput" class="form-control w-auto" />
+                    </p>
+                    <p>
+                        Invio notifiche:<br />
+                        @*<input type="checkbox" id="RigaAttivit_WP_IsOwner" name="RigaAttivitàWP.IsOwner" value="@Model.RigaAttivitaWP.IsOwner" />*@
+                        <input type="checkbox" id="RigaAttivitaWP_Notifiche" name="RigaAttivitaWP.Notifiche" value="true" class="exclusive-checkbox" data-group="owner" @(Model.RigaAttivitaWP.Notifiche ? "checked" : "") />
+                        @*<input asp-for="@Model.RigaAttivitaWP.IsOwner" value="@Model.RigaAttivitaWP.IsOwner" />*@
+                    </p>
+                    <p>
+                        Intervallo notifiche in giorni:<br />
+                        <input asp-for="@Model.RigaAttivitaWP.GiorniNotifiche" value="@Model.RigaAttivitaWP.GiorniNotifiche" class="form-control w-auto" />
+                    </p>
+                    <p>
+                        Giorni dalla scadenza di avvio notifiche (0 da subito):<br />
+                        <input asp-for="@Model.RigaAttivitaWP.GiorniNotifiche" value="@Model.RigaAttivitaWP.GiorniPreavviso" class="form-control w-auto" />
+                    </p>
+                    <p>
+                        Completato: <br />
+                        <input type="checkbox" id="RigaAttivitaWP_Completato" name="RigaAttivitaWP.Completato" value="true" class="exclusive-checkbox" data-group="owner" @(Model.RigaAttivitaWP.Completato ? "checked" : "") />
+
+                    </p>
+                    <br />
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
+                    <button type="submit" class="bottone bottone1" data-save="modal">Salva</button>
+                </form>
+
+            </div>
+            <br />
+
+            <div class="modal-footer">
+            </div>
+
+        </div>
+    </div>
+</div>
+
+

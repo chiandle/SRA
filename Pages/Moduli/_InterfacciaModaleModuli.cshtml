@@ -1,0 +1,84 @@
+﻿@model SRA.Models.InputModuliModel
+<!-- Modal -->
+<style>
+    .riquadro {
+        border: 1px solid black; /* Bordo nero di 2px */
+        padding: 10px; /* Spaziatura interna */
+        margin: 20px; /* Spaziatura esterna */
+        width: 300px; /* Larghezza del div */
+        text-align: center; /* Allinea il testo al centro */
+    }
+</style>
+<div class="modal fade" id="mod-stato" tabindex="-1" role="dialog" aria-labelledby="addContactLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addContactLabel">Aggiungi/Modifica Modulo Applicativo</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    
+                </button>
+            </div>
+
+
+            <div class="modal-body">
+                <form id="idnuovomoduli" asp-page-handler="AggModModulo" method="post">
+                    Nome <br />
+                    <input asp-for="@Model.Modulo.Nome" class="form-control" />
+                    <br />
+                    In produzione
+                    <input asp-for="@Model.Modulo.Inproduzione" /> <br /><br />
+                    Applicazione<br />
+                    <select asp-for="@Model.Modulo.IDApplicazione" asp-items="@Model.ListaApplicazioni" class="form-control"></select><br /><br />
+                    Produttore
+                    <select id="produttore" asp-for="@Model.Modulo.IDProduttore" asp-items="@Model.ListaAziende" class="form-control"></select><br /><br />
+                    Fornitore
+                    <select id="fornitore" asp-for="@Model.Modulo.IDFornitore" asp-items="@Model.ListaAziende" class="form-control"></select><br /><br />
+                    Titolo d'uso<br />
+                    <select id="titoloduso" asp-for="@Model.Modulo.TitolodUso" asp-items="@Model.ListaTitolodUso" class="form-control"></select><br />
+                    <br />
+                    Basi di dati
+                    <div class="riquadro" style="height:200px;overflow-y:scroll">
+                        <table>
+                            @for (var i = 0; i<Model.ListaBasiDati.Count(); i++)
+                            {
+                                <tr>
+                                    <td style="text-align:left">
+                                        <input id="@Model.ListaBasiDati[i].IDBasedati" asp-for="@Model.ListaBasiDati[i].Selezionata" />
+                                        <label class="custom-control-label" for="@Model.ListaBasiDati[i].IDBasedati">
+                                            @Model.ListaBasiDati[i].Nome
+                                        </label>
+                                        <input type="hidden" asp-for="@Model.ListaBasiDati[i].IDBasedati" value="@Model.ListaBasiDati[i].IDBasedati" />
+                                        <input type="hidden" asp-for="@Model.ListaBasiDati[i].Nome" value="@Model.ListaBasiDati[i].Nome" />
+                                    </td>
+                                </tr>
+                            }
+                        </table>
+                        
+                    </div>
+                    Data di avvio<br />
+                    <input asp-for="@Model.Modulo.DataAvvio" class="form-control" /><br /><br />
+                    Data di dismissione<br />
+                    <input asp-for="@Model.Modulo.DataDismissione" class="form-control" />
+                    <br />
+                    <input type="hidden" asp-for="Modulo.ID" value="@Model.Modulo.ID" />
+                    <input type="hidden" asp-for="IDApplicazioneSelezionata" value="@Model.IDApplicazioneSelezionata" />
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
+                    <button type="submit" class="bottone bottone1" data-save="modal">Salva</button>
+                </form>
+
+            </div>
+            <br />
+
+            <div class="modal-footer">
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+
+
+
+</script>

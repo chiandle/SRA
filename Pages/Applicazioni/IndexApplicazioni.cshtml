@@ -1,0 +1,188 @@
+﻿@page
+@model SRA.Pages.Applicazioni.IndexModel
+
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Elenco delle Applicazioni</h2>
+
+<div>
+    <p style="color:red">@Model.Messaggio</p>
+</div>
+<p>
+    <button type="button" class="bottone bottone1" data-toggle="ajax-modal-aggapplicazione">
+        Aggiungi
+    </button>
+</p>
+@*<table class="table table-hover table-striped table-bordered table-sm">*@
+<table id="tblapplicazioni" class="display table table-hover table-striped table-bordered table-sm" style="width:100%">
+    <thead>
+        <tr>
+            <th>
+                <input type="text" placeholder="Filtra per Nome" />
+            </th>
+            <th>
+                <input type="text" placeholder="Filtra per Stato" />
+            </th>
+            <th>
+                
+            </th>
+            <th>
+               
+            </th>
+            <th>
+                <input type="text" placeholder="Filtra per Tipo Applicazione" />
+            </th>
+            <th>
+                <input type="text" placeholder="Filtra per Tipo Gestione" />
+            </th>
+            <th></th>
+            <th></th>
+            <th></th>
+        </tr>
+
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Applicazioni[0].Nome)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Applicazioni[0].Stato)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Applicazioni[0].DataAvvio)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Applicazioni[0].DataDismissione)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Applicazioni[0].TipoApplicazione)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Applicazioni[0].TipoGestione)
+            </th>
+            <th></th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Applicazioni)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nome)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Stato)
+                </td>
+                <td>
+                   @Html.DisplayFor(modelItem => item.DataAvvio)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DataDismissione)
+                </td>
+                <td>
+                   @Html.DisplayFor(modelItem => item.TipoApplicazione)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TipoGestione)
+                </td>
+                <td>
+                    <a asp-page="../Moduli/IndexModuli" asp-route-idapplicazioneselezionata="@item.ID" class="bottone bottone1">Moduli</a>
+                </td>
+                <td>
+                    <button type="button" class="bottone bottone1" data-toggle="ajax-modal-modapplicazione" data-idapplicazione="@item.ID">
+                        Modifica
+                    </button>
+                </td>
+                <td>
+                    <form method="get">
+                        <input type="hidden" name="handler" value="EliminaApplicazione" />
+                        <input type="hidden" name="idapplicazione" value="@item.ID" />
+                        <button id="elimina" type="submit" data-toggle="elimina" class="btn btn-danger">Elimina</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<!-- Modal placeholder -->
+<div id="modal-placeholder-applicazioni"></div>
+
+@section Scripts {
+    <script>
+                $(function() {
+            $('button[data-toggle="elimina"]').click(function(e) {
+                var confirmed = confirm('Sei sicuro?');
+                if (!confirmed) {
+                    e.preventDefault(); // Annulla l'invio del modulo
+                }
+            });
+        });
+
+        
+
+        $(document).ready(function () {
+            var table = $('#tblapplicazioni').DataTable({
+                // Opzioni di configurazione
+                paging: false,          // Abilita la paginazione
+                searching: true,       // Abilita la ricerca
+                ordering: true,        // Abilita l'ordinamento delle colonne
+                columnDefs: [
+            { orderable: false, targets: [6, 7, 8] }, // Indici delle colonne da escludere dall'ordinamento
+            { type: 'date-euro', targets: 2 }
+        ]
+            });
+
+                // Impedisci la propagazione dell'evento di clic sugli input
+        $('#tblapplicazioni thead tr:eq(0) input').on('click', function(event) {
+            event.stopPropagation();
+        });
+
+            $('#tblapplicazioni thead tr:eq(0) input').on('keyup clear', function() {
+            var colIndex = $(this).closest('th').index();
+            //console.log('ColIndex:', colIndex, 'Value:', this.value); // Aggiungi un log per il debug
+            table.column(colIndex).search(this.value).draw();
+        });
+        });
+
+
+
+                $(function () {
+            var placeholderElement = $('#modal-placeholder-applicazioni');
+            $('button[data-toggle="ajax-modal-aggapplicazione"]').click(function (event) {
+                var geturl = `${window.location.protocol}//${window.location.hostname}${window.location.port ? `:${window.location.port}` : ''}`;
+                var urldettaglio = '/Applicazioni/IndexApplicazioni?handler=AggiungiModalePartial';
+                geturl += urldettaglio;
+                $.get(geturl).done(function (data) {
+                    // append HTML to document, find modal and show it
+                    //$(document.body).append(data).find('.modal').modal('show');
+                    placeholderElement.html(data);
+                    placeholderElement.find('.modal').modal('show');
+                });
+            });
+        });
+
+        $(function () {
+            var placeholderElement = $('#modal-placeholder-applicazioni');
+            $('button[data-toggle="ajax-modal-modapplicazione"]').click(function (event) {
+                var geturl = `${window.location.protocol}//${window.location.hostname}${window.location.port ? `:${window.location.port}` : ''}`;
+                var urldettaglio = '/Applicazioni/IndexApplicazioni?handler=AggiungiModalePartial';
+                geturl += urldettaglio;
+                const idapplicazione = $(this).attr('data-idapplicazione');
+                geturl += "&idapplicazione=";
+                geturl += idapplicazione;
+                $.get(geturl).done(function (data) {
+                    // append HTML to document, find modal and show it
+                    //$(document.body).append(data).find('.modal').modal('show');
+                    placeholderElement.html(data);
+                    placeholderElement.find('.modal').modal('show');
+                });
+            });
+        });
+
+    </script>
+}

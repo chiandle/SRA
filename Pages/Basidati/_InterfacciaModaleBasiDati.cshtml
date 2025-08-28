@@ -1,0 +1,51 @@
+﻿@model SRA.Models.InputBasiDatiModel
+<!-- Modal -->
+<div class="modal fade" id="mod-stato" tabindex="-1" role="dialog" aria-labelledby="addContactLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addContactLabel">Aggiungi/Modifica Base di Dati</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    
+                </button>
+            </div>
+
+
+            <div class="modal-body">
+                <form id="idnuovobasidati" asp-page-handler="AggModBaseDati" method="post">
+                    Nome <br />
+                    <input asp-for="@Model.BaseDati.Nome" class="form-control" />
+                    <br />
+                    Descrizione<br />
+                    <input asp-for="@Model.BaseDati.Descrizione" /> <br /><br />
+                    Sistema <br />
+                    <select asp-for="@Model.BaseDati.IDSistema" asp-items="@Model.ListaSistemi" class="form-control"></select><br /><br />
+                    Dbms <br />
+                    <select asp-for="@Model.BaseDati.IDDbms" asp-items="@Model.ListaDbms" class="form-control"></select><br /><br />
+                    Nome istanza<br />
+                    <input asp-for="@Model.BaseDati.NomeIstanza" class="form-control" /><br /><br />
+                    Ruolo base dati
+                    <input asp-for="@Model.BaseDati.RuoloBasedati" class="form-control" />
+
+                    <br />
+                    <input type="hidden" asp-for="BaseDati.ID" value="@Model.BaseDati.ID" />
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
+                    <button type="submit" class="bottone bottone1" data-save="modal">Salva</button>
+                </form>
+
+            </div>
+            <br />
+
+            <div class="modal-footer">
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+
+
+
+</script>

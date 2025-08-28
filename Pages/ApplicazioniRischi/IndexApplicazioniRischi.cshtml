@@ -1,0 +1,93 @@
+﻿@page
+@model SRA.Pages.ApplicazioniRischi.IndexApplicazioniRischiModel
+@{
+}
+<h2>Valutazione dei Rischi</h2>
+
+<p>
+    <button type="button" class="bottone bottone1" data-toggle="ajax-modal-aggvalutazione">
+        Aggiungi
+    </button>
+</p>
+<table id="tblapplicazionirischi" class=" display table table-hover table-striped table-bordered table-sm">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ListaApplicazioniRischi[0].NomeApplicazione)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ListaApplicazioniRischi[0].NomeRischio)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ListaApplicazioniRischi[0].Likelihood)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ListaApplicazioniRischi[0].Impact)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ListaApplicazioniRischi[0].Risk_Rating)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ListaApplicazioniRischi[0].DataUltimaModifica)
+            </th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.ListaApplicazioniRischi)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NomeApplicazione)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NomeRischio)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Likelihood)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Impact)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Risk_Rating)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DataUltimaModifica)
+                </td>
+                <td>
+                    <a class="bottone bottone1" asp-page="/ApplicazioniRischi/ValutazioneRischio" asp-route-idapplicazione="@item.IDApplicazione" asp-route-idrischio="@item.IDRischio">
+                        Valuta
+                    </a>
+                </td>
+                <td>
+                    <a class="bottone bottone1" asp-page="/ApplicazioniRischi/StoricoRischio" asp-route-idapplicazione="@item.IDApplicazione" asp-route-idrischio="@item.IDRischio">
+                        Storico
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<!-- Modal placeholder -->
+<div id="modal-placeholder-aggvalutazione"></div>
+
+@section Scripts {
+<script>
+     $(document).ready(function () {
+            $('#tblapplicazionirischi').DataTable({
+                // Opzioni di configurazione
+                paging: false,          // Abilita la paginazione
+                searching: true,       // Abilita la ricerca
+                ordering: true,        // Abilita l'ordinamento delle colonne
+               columnDefs: [
+                  { orderable: false, targets: [6, 7]},  // Indici delle colonne da escludere dall'ordinamento
+                  { type: 'date-euro', targets: 5 }
+               ]
+            }
+            );
+        });
+</script>
+}

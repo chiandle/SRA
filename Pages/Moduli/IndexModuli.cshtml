@@ -1,0 +1,187 @@
+﻿@page
+@model SRA.Pages.Moduli.IndexModel
+
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Elenco dei Moduli</h2>
+
+<p>
+    <button type="button" class="bottone bottone1" data-toggle="ajax-modal-aggmodulo" data-idapplicazioneselezionataagg="@Model.IDApplicazioneSelezionata">
+        Aggiungi
+    </button>
+</p>
+<table id="tblmoduli" class="display table table-hover table-striped table-bordered table-sm" style="width:100%">
+    <thead>
+        <tr>
+            <th>
+                <input type="text" placeholder="Filtra per Nome" />
+            </th>
+            <th>
+                <input type="text" placeholder="Filtra per Nome Applicazione" />
+            </th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th>
+                <input type="text" placeholder="Filtra per Nome Produttore" />
+            </th>
+            <th>
+                <input type="text" placeholder="Filtra per Fornitore" />
+            </th>
+            <th>
+                <input type="text" placeholder="Filtra per titolo d'uso'" />
+            </th>
+            <th></th>
+        </tr>
+
+        <tr>
+            <th>
+               @Html.DisplayNameFor(model => model.Moduli[0].Nome)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Moduli[0].NomeApplicazione)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Moduli[0].Inproduzione)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Moduli[0].DataAvvio)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Moduli[0].DataDismissione)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Moduli[0].NomeProduttore)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Moduli[0].NomeFornitore)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Moduli[0].TitolodUso)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Moduli)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nome)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelitem => item.NomeApplicazione)
+                </td>
+                <td data-order="@item.Inproduzione">
+                    @Html.DisplayFor(modelItem => item.Inproduzione)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DataAvvio)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DataDismissione)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NomeProduttore)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NomeFornitore)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TitolodUso)
+                </td>
+                <td>
+                    <button type="button" class="bottone bottone1" data-toggle="ajax-modal-modmodulo" data-idmodulo="@item.ID" data-idapplicazioneselezionata="@Model.IDApplicazioneSelezionata">
+                        Modifica
+                    </button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<!-- Modal placeholder -->
+<div id="modal-placeholder-moduli"></div>
+
+@section Scripts {
+    <script>
+
+        $(document).ready(function () {
+           var table = $('#tblmoduli').DataTable({
+                // Opzioni di configurazione
+                paging: false,          // Abilita la paginazione
+                searching: true,       // Abilita la ricerca
+                ordering: true,
+                columnDefs: [
+            { orderable: false, targets: 8 }, // Indici delle colonne da escludere dall'ordinamento
+            { type: 'date-euro', targets: [3, 4] },
+            { targets: 2,orderDataType: 'dom-checkbox' } // Indice della colonna "In Produzione"
+        ]
+                });
+        // Impedisci la propagazione dell'evento di clic sugli input
+        $('#tblmoduli thead tr:eq(0) input').on('click', function(event) {
+            event.stopPropagation();
+        });
+
+        $('#tblmoduli thead tr:eq(0) input').on('keyup clear', function() {
+                    var colIndex = $(this).closest('th').index();
+                    //console.log('ColIndex:', colIndex, 'Value:', this.value); // Aggiungi un log per il debug
+                    table.column(colIndex).search(this.value).draw();
+        });
+
+                // Definisci il tipo di ordinamento personalizzato
+        $.fn.dataTable.ext.order['dom-checkbox'] = function(settings, col) {
+            return this.api().column(col, {order: 'index'}).nodes().map(function(td, i) {
+                return $(td).data('order');
+            });
+        };
+        });
+
+                $(function () {
+            var placeholderElement = $('#modal-placeholder-moduli');
+            $('button[data-toggle="ajax-modal-aggmodulo"]').click(function (event) {
+                var geturl = `${window.location.protocol}//${window.location.hostname}${window.location.port ? `:${window.location.port}` : ''}`;
+                var urldettaglio = '/Moduli/IndexModuli?handler=AggiungiModalePartial';
+                geturl += urldettaglio;
+                const idapplicazioneselezionataagg = $(this).attr('data-idapplicazioneselezionataagg');
+                if (idapplicazioneselezionataagg) {
+                    geturl += "&idapplicazioneselezionata=";
+                    geturl += idapplicazioneselezionataagg;
+                }
+                $.get(geturl).done(function (data) {
+                    // append HTML to document, find modal and show it
+                    //$(document.body).append(data).find('.modal').modal('show');
+                    placeholderElement.html(data);
+                    placeholderElement.find('.modal').modal('show');
+                });
+            });
+        });
+
+        $(function () {
+            var placeholderElement = $('#modal-placeholder-moduli');
+            $('button[data-toggle="ajax-modal-modmodulo"]').click(function (event) {
+                var geturl = `${window.location.protocol}//${window.location.hostname}${window.location.port ? `:${window.location.port}` : ''}`;
+                var urldettaglio = '/Moduli/IndexModuli?handler=AggiungiModalePartial';
+                geturl += urldettaglio;
+                const idmodulo = $(this).attr('data-idmodulo');
+                const idapplicazioneselezionata = $(this).attr('data-idapplicazioneselezionata');
+                geturl += "&idmodulo=";
+                geturl += idmodulo;
+                if (idapplicazioneselezionata) {
+                    geturl += "&idapplicazioneselezionata=";
+                    geturl += idapplicazioneselezionata;
+                }
+
+                $.get(geturl).done(function (data) {
+                    // append HTML to document, find modal and show it
+                    //$(document.body).append(data).find('.modal').modal('show');
+                    placeholderElement.html(data);
+                    placeholderElement.find('.modal').modal('show');
+                });
+            });
+        });
+    </script>
+}

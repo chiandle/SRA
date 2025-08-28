@@ -1,0 +1,121 @@
+﻿@page
+@model SRA.Pages.ImpattoMisure.IndexImpattoMisureModel
+@{
+    ViewData["Title"] = "Index";
+
+}
+<h2>Elenco dell'impatto delle contromisure su rischi e applicazioni </h2>
+<br /> 
+<p>
+    <button type="button" class="bottone bottone1" data-toggle="ajax-modal-aggimpattomisura">
+        Aggiungi
+    </button>
+</p>
+<table id="tblimpattomisure" class="display table table-hover table-striped table-bordered table-sm">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ImpattoMisure[0].NomeMisura)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ImpattoMisure[0].NomeApplicazione)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ImpattoMisure[0].NomeRischio)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ImpattoMisure[0].Motivazione)
+            </th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.ImpattoMisure)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NomeMisura)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NomeApplicazione)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NomeRischio)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Motivazione)
+                </td>
+                <td></td>
+                <td>
+                    <button type="button" class="bottone bottone1" data-toggle="ajax-modal-modimpattomisura" data-idmisura="@item.IDMisura" data-idapplicazione="@item.IDApplicazione" data-idrischio="@item.IDRischio">
+                        Modifica
+                    </button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<!-- Modal placeholder -->
+<div id="modal-placeholder-impattomisure"></div>
+
+
+@section Scripts {
+    <script>
+
+                        $(document).ready(function () {
+                            $('#tblimpattomisure').DataTable({
+                                // Opzioni di configurazione
+                                paging: false,          // Abilita la paginazione
+                                searching: true,       // Abilita la ricerca
+                                ordering: true,        // Abilita l'ordinamento delle colonne
+                            }
+                            );
+                        });
+
+        $(function () {
+            var placeholderElement = $('#modal-placeholder-impattomisure');
+            $('button[data-toggle="ajax-modal-aggimpattomisura"]').click(function (event) {
+                var geturl = `${window.location.protocol}//${window.location.hostname}${window.location.port ? `:${window.location.port}` : ''}`;
+                var urldettaglio = '/ImpattoMisure/IndexImpattoMisure?handler=AggiungiModalePartial';
+                geturl += urldettaglio;
+
+                $.get(geturl).done(function (data) {
+                    // append HTML to document, find modal and show it
+                    //$(document.body).append(data).find('.modal').modal('show');
+                    placeholderElement.html(data);
+                    // const modal = document.getElementById('modal');
+                    // modal.removeAttribute('aria-hidden');
+                    // modal.setAttribute('inert', 'false');
+                    // modal.querySelector('input, button, select, textarea').focus();
+                    placeholderElement.find('.modal').modal('show');
+                });
+            });
+        });
+
+        $(function () {
+            var placeholderElement = $('#modal-placeholder-impattomisure');
+            $('button[data-toggle="ajax-modal-modimpattomisura"]').click(function (event) {
+                var geturl = `${window.location.protocol}//${window.location.hostname}${window.location.port ? `:${window.location.port}` : ''}`;
+                var urldettaglio = '/ImpattoMisure/IndexImpattoMisure?handler=AggiungiModalePartial';
+                geturl += urldettaglio;
+                        const idmisura = $(this).attr('data-idmisura');
+                        const idapplicazione = $(this).attr('data-idapplicazione');
+                        const idrischio = $(this).attr('data-idrischio');
+                        geturl += "&idmisura=";
+                geturl += idmisura;
+                geturl += "&idapplicazione=";
+                geturl += idapplicazione;
+                geturl += "&idrischio=";
+                geturl += idrischio;
+                $.get(geturl).done(function (data) {
+                    // append HTML to document, find modal and show it
+                    //$(document.body).append(data).find('.modal').modal('show');
+                    placeholderElement.html(data);
+                    placeholderElement.find('.modal').modal('show');
+                });
+            });
+        });
+    </script>
+}

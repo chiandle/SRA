@@ -1,0 +1,48 @@
+﻿@model SRA.Models.InputApplicazioneModel
+<!-- Modal -->
+<div class="modal fade" id="mod-stato" tabindex="-1" role="dialog" aria-labelledby="addContactLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addContactLabel">Aggiungi Applicazione</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    
+                </button>
+            </div>
+
+
+            <div class="modal-body">
+                <form id="idnuovapplicazione" asp-page-handler="AggiungiApplicazione" method="post">
+                    Nome <br />
+                    <input asp-for="@Model.Applicazione.Nome" class="form-control" /> <br /> <br />
+                    Stato Applicazione
+                    <select id="statoapplicazione" asp-for="@Model.Applicazione.Stato" asp-items="@Model.ListaStatoApplicazione" class="form-control"></select><br />
+                    Tipo Applicazione<br />
+                    <select id="tipoapplicazione" asp-for="@Model.Applicazione.TipoApplicazione" asp-items="@Model.ListaTipoApplicazione" class="form-control"></select><br />
+                     Tipo Gestione<br />
+                    <select id="tipogestione" asp-for="@Model.Applicazione.TipoGestione" asp-items="@Model.ListaTipoGestione" class="form-control"></select><br />
+                    Data Avvio<br />
+                    <input asp-for="@Model.Applicazione.DataAvvio" class="form-control" />
+
+                    <br />
+                    <input type="hidden" asp-for="Applicazione.ID" value="@Model.Applicazione.ID" />
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
+                    <button type="submit" class="bottone bottone1" data-save="modal">Salva</button>
+                </form>
+                
+            </div>
+            <br />
+           
+            <div class="modal-footer">
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    
+
+
+</script>

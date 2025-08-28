@@ -1,0 +1,44 @@
+﻿@model SRA.Models.InputDBMSsModel
+<!-- Modal -->
+<div class="modal fade" id="mod-stato" tabindex="-1" role="dialog" aria-labelledby="addContactLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addContactLabel">Aggiungi/Modifica Base di Dati</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    
+                </button>
+            </div>
+
+
+            <div class="modal-body">
+                <form id="idnuovodbmss" asp-page-handler="AggModDBMS" method="post">
+                    Nome <br />
+                    <input asp-for="@Model.DBMS.Nome" class="form-control" />
+                    <br />
+                    Versione<br />
+                    <input asp-for="@Model.DBMS.Versione" /> <br /><br />
+                    Produttore<br />
+                    <select id="produttore" asp-for="@Model.DBMS.IDProduttore" asp-items="@Model.ListaAziende" class="form-control"></select><br /><br />
+                    <br />
+                    <input type="hidden" asp-for="DBMS.ID" value="@Model.DBMS.ID" />
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
+                    <button type="submit" class="bottone bottone1" data-save="modal">Salva</button>
+                </form>
+
+            </div>
+            <br />
+
+            <div class="modal-footer">
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+
+
+
+</script>

@@ -1,0 +1,77 @@
+﻿@page
+@model SRA.Pages.Stampe.IndexStampeModel
+@{
+}
+<br /><br />
+<h2>Scegli l'elemento da stampare e il formato del file</h2>
+<h2>Al momento è funzionante solo la stampa delle Attività in formato docx</h2>
+<br /><br />
+
+<div>
+    <form>
+        <b>Seleziona l'anno:</b> <select asp-for="@Model.AnnoSelezionato" name="annoselezionato" asp-items="@Model.ListaAnni" class="form-control" onchange="this.form.submit()"></select>
+    </form>
+</div>
+
+<br /> <br />
+
+<div>
+    <table id="tabellastampe">
+        <thead>
+            <tr>
+                <th>Elemento</th>
+                <th>Formato</th>
+            </tr>
+        </thead>
+        <tbody>
+           <tr>
+                <form method="post" asp-page-handler="Stampa">
+                <td>
+                    <button type="submit" class="bottone bottone1">
+                        Applicazioni
+                        <input type="hidden" asp-for="@Model.Elemento" value="Applicazioni" />
+                        <input type="hidden" asp-for="@Model.AnnoSelezionato" value="@Model.AnnoSelezionato" />
+                    </button>
+                </td>
+                <td>
+                    <label><input type="radio" value="docx" asp-for="@Model.FormatoFile" /> docx</label>
+                    &nbsp;
+                    <label><input type="radio" value="PDF" asp-for="@Model.FormatoFile" /> PDF</label>
+                </td>
+                </form>
+            </tr>
+
+            <tr>
+                <form method="post" asp-page-handler="Stampa">
+                <td>
+                    <button type="submit" class="bottone bottone1">
+                        Attività
+                    </button>
+                    <input type="hidden" asp-for="@Model.Elemento" value="Attività" />
+                    <input type="hidden" asp-for="@Model.AnnoSelezionato" value="@Model.AnnoSelezionato" />
+                </td>
+                <td>
+                    <label><input type="radio" value="docx" asp-for="@Model.FormatoFile" /> docx</label>
+                    &nbsp;
+                    <label><input type="radio" value="PDF" asp-for="@Model.FormatoFile" /> PDF</label>
+                </td>
+                </form>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+        var table = $('#tabellastampe').DataTable({
+                // Opzioni di configurazione
+                paging: false,          // Abilita la paginazione
+                searching: false,       // Abilita la ricerca
+                ordering: false        // Abilita l'ordinamento delle colonne
+            });
+        });
+
+        
+    </script>
+    }

@@ -1,0 +1,299 @@
+﻿@page
+@model SRA.Pages.NSElencoAttività.IndexAttivitàModel
+@{
+}
+<style>
+    .flex-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    }
+    .centered {
+    text-align: center;
+    vertical-align: middle;
+    }
+   .inline-form
+    {
+        display: inline-block;
+        margin: 0;
+    }
+</style>
+
+
+
+
+
+<div class="flex-container">
+    <div><h2>Elenco delle Attività</h2></div>
+    <div>
+        <form>
+            <b>Seleziona l'anno:</b> <select asp-for="@Model.AnnoSelezionato" id="annoselezionato" name="annoselezionato" asp-items="@Model.ListaAnni" class="form-control" onchange="this.form.submit()"></select>
+            <input asp-for="@Model.StrutturaSelezionata" value="@Model.StrutturaSelezionata" name="strutturaselezionata" type="hidden" />
+            <input asp-for="@Model.SoloPersonali" value="@Model.SoloPersonali" name="solopersonali" type="hidden" />
+        </form>
+    </div>
+
+</div>
+
+<div>
+    <p>
+        <button type="button" class="bottone bottone1" data-toggle="ajax-modal-aggattivita">
+            Aggiungi
+        </button>
+    </p>
+</div>
+
+<div>
+    <p>
+        <form class="inline-form">
+            <label asp-for="@Model.StrutturaSelezionata"></label>
+            <select asp-for="@Model.StrutturaSelezionata" asp-items="@Model.ListaStrutture" name="strutturaselezionata" onchange="this.form.submit()"></select>
+            <input asp-for="@Model.AnnoSelezionato" value="@Model.AnnoSelezionato" name="annoselezionato" type="hidden" />
+            <input asp-for="@Model.SoloPersonali" value="@Model.SoloPersonali" name="solopersonali" type="hidden" />
+        </form>
+        &nbsp;
+        <form class="inline-form">
+            Solo attività assegnate <input asp-for="@Model.SoloPersonali" onchange="this.form.submit()" />
+            <input asp-for="@Model.StrutturaSelezionata" value="@Model.StrutturaSelezionata" name="strutturaselezionata" type="hidden" />
+            <input asp-for="@Model.AnnoSelezionato" value="@Model.AnnoSelezionato" name="annoselezionato" type="hidden" />
+        </form>
+    </p>
+
+</div>
+<table id="tblattivita" class="display table table-hover table-striped table-bordered table-sm">
+    <thead>
+        <tr>
+            <th>
+                <input type="text" placeholder="Filtra per Nome" />
+            </th>
+            <th>
+                <input type="text" placeholder="Filtra per Applicazione" />
+            </th>
+            <th>
+
+            </th>
+            <th>
+
+            </th>
+            <th>
+                <input type="text" placeholder="Filtra per Tipologia" />
+            </th>
+            <th>
+                <input type="text" placeholder="Filtra per Descrizione" />
+            </th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+        </tr>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ElencoAttività[0].Nome)
+            </th>
+            <th>
+                Applicazioni
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ElencoAttività[0].DataInizio)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ElencoAttività[0].DataFine)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ElencoAttività[0].Tipologia)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ElencoAttività[0].Descrizione)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ElencoAttività[0].Assegnata)
+            </th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.ElencoAttività)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nome)
+                </td>
+                <td>
+                    @foreach (var item2 in Model.ElencoAttivitàApplicazioni.Where(a => a.IDattività == item.ID).ToList())
+                    {
+                        <span>@item2.NomeApplicazione</span><br />
+                        <br />
+                    }
+                </td>
+                    <td>
+                    @Html.DisplayFor(modelItem => item.DataInizio)
+                    </td>
+                    <td>
+                    @Html.DisplayFor(modelItem => item.DataFine)
+                    </td>
+                    <td>
+                    @Html.DisplayFor(modelItem => item.Tipologia)
+                    </td>
+                    <td>
+                    @Html.DisplayFor(modelItem => item.Descrizione)
+                    </td>
+                    <td class="centered">
+                    @if (item.Assegnata)
+                    {
+                                        <img src="/images/circle_green.png" alt="Attività assegnata all'utente corrente" title="Attività assegnata all'utente corrente">
+                    }
+                    </td>
+                    <td class="centered">
+                    @*<button type="button" class="bottone bottone1" data-toggle="ajax-modal-modpersonale" data-idattivita="@item.ID">
+                        Personale impegnato
+                    </button>*@
+                        <a class="bottone bottone1" asp-page="./AttivitàPersone" asp-route-idattivita="@item.ID">Personale</a>
+                    </td>
+                    <td class="centered">
+                    @{
+                        DateTime? dataUltimaModifica = item.DataUltimaModifica;
+                        string formattedDateTime = dataUltimaModifica.HasValue ? dataUltimaModifica.Value.ToString("dd/MM/yyyy HH:mm") : "Data non disponibile";
+                    }
+                        <button type="button" class="bottone bottone1" data-toggle="ajax-modal-modattivita" data-idattivita="@item.ID" title="Modificata da @item.AutoreUltimaModifica il @formattedDateTime">
+                            Modifica
+                        </button>
+                    </td>
+                    <td class ="centered">
+                        <a class="bottone bottone1" asp-page="./AttivitàWPs" asp-route-idattivita="@item.ID">WP</a>
+                    </td>
+                    <td class="centered">
+                        <form method="get">
+                            <input type="hidden" name="handler" value="EliminaAttivita" />
+                            <input type="hidden" name="idattivita" value="@item.ID" />
+                            <button type="submit" class="btn btn-danger" data-toggle="elimina">Elimina</button>
+                        </form>
+
+                    </td>
+                </tr>
+        }
+    </tbody>
+</table>
+
+<!-- Modal placeholder -->
+<div id="modal-placeholder-attivita"></div>
+
+@section Scripts {
+        <script>
+                             $(function() {
+                $('button[data-toggle="elimina"]').click(function(e) {
+                    var confirmed = confirm('Sei sicuro?');
+                    if (!confirmed) {
+                        e.preventDefault(); // Annulla l'invio del modulo
+                    }
+                });
+            });
+
+             // $(document).ready(function() {
+             //        // Inizializza il plug-in di ordinamento per le date
+             //        $.fn.dataTable.moment('DD/MM/YYYY');
+
+
+             //    });
+                 $.fn.dataTable.ext.order['dom-image'] = function (settings, col) {
+                    return this.api().column(col, {order: 'index'}).nodes().map(function (td, i) {
+                        return $('img', td).length;
+                    });
+                };
+
+             $(document).ready(function () {
+                var table = $('#tblattivita').DataTable({
+                    // Opzioni di configurazione
+                    paging: false,          // Abilita la paginazione
+                    searching: true,       // Abilita la ricerca
+                    ordering: true,        // Abilita l'ordinamento delle colonne
+                    order: [],
+                    columnDefs: [
+                { orderable: false, targets: [7, 8, 9, 10] }, // Indici delle colonne da escludere dall'ordinamento
+                { type: 'date-euro', targets: [2, 3] },
+                    { targets: 6, orderDataType: 'dom-image' }
+            ]
+                }
+                );
+
+                    // Impedisci la propagazione dell'evento di clic sugli input
+            $('#tblattivita thead tr:eq(0) input').on('click', function(event) {
+                event.stopPropagation();
+            });
+
+        $(function () {
+            var placeholderElement = $('#modal-placeholder-attivita');
+            $('button[data-toggle="ajax-modal-aggattivita"]').click(function (event) {
+                var geturl = `${window.location.protocol}//${window.location.hostname}${window.location.port ? `:${window.location.port}` : ''}`;
+                var urldettaglio = '/Attività/IndexElencoAttività?handler=AggiungiModalePartial';
+                var anno = $('#annoselezionato').val();
+                geturl += urldettaglio;
+                geturl += "&annoselezionato=";
+                geturl += anno;
+                $.get(geturl).done(function (data) {
+                    // append HTML to document, find modal and show it
+                    //$(document.body).append(data).find('.modal').modal('show');
+                    placeholderElement.html(data);
+                    placeholderElement.find('.modal').modal('show');
+                });
+            });
+        });
+
+
+        $('#tblattivita tbody').on('click', 'button[data-toggle="ajax-modal-modattivita"]', function () {
+                var placeholderElement = $('#modal-placeholder-attivita');
+                var geturl = `${window.location.protocol}//${window.location.hostname}${window.location.port ? `:${window.location.port}` : ''}`;
+                var urldettaglio = '/Attività/IndexElencoAttività?handler=AggiungiModalePartial';
+                geturl += urldettaglio;
+                const idattivita = $(this).attr('data-idattivita');
+                console.log('Pulsante cliccato, ID attività');
+                geturl += "&idattivita=";
+                geturl += idattivita;
+                $.get(geturl).done(function (data) {
+                    // append HTML to document, find modal and show it
+                    //$(document.body).append(data).find('.modal').modal('show');
+                    placeholderElement.html(data);
+                    placeholderElement.find('.modal').modal('show');
+                });
+            });
+
+                 $('#tblattivita thead tr:eq(0) input').on('keyup clear', function() {
+                var colIndex = $(this).closest('th').index();
+                console.log('Esegue draw ColIndex:', colIndex, 'Value:', this.value); // Aggiungi un log per il debug
+                table.column(colIndex).search(this.value).draw();
+            });
+
+
+            });
+
+
+                   // $(function () {
+                //$('button[data-toggle="ajax-modal-modattivita"]').click(function (event) {
+                // QUI VA IL CODICE TAGLIATO
+            //});
+
+
+
+            //vecchia modalità inserimento personale tramite interfaccia modale
+            // $(function () {
+            //     var placeholderElement = $('#modal-placeholder-attivita');
+            //     $('button[data-toggle="ajax-modal-modpersonale"]').click(function (event) {
+            //         var geturl = `${window.location.protocol}//${window.location.hostname}${window.location.port ? `:${window.location.port}` : ''}`;
+            //         var urldettaglio = '/Attività/IndexElencoAttività?handler=ModPersonaleModalePartial';
+            //         geturl += urldettaglio;
+            //         const idattivita = $(this).attr('data-idattivita');
+            //         geturl += "&idattivita=";
+            //         geturl += idattivita;
+            //         $.get(geturl).done(function (data) {
+            //             // append HTML to document, find modal and show it
+            //             //$(document.body).append(data).find('.modal').modal('show');
+            //             placeholderElement.html(data);
+            //             placeholderElement.find('.modal').modal('show');
+            //         });
+            //     });
+            // });
+
+        </script>
+}

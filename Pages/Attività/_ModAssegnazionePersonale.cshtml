@@ -1,0 +1,89 @@
+﻿@model SRA.Models.AttivitaPersonaInputModel
+<!-- Modal -->
+<div class="modal fade" id="mod-stato" tabindex="-1" role="dialog" aria-labelledby="addContactLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addContactLabel">Assegna il personale</h5><br /><br />
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    
+                </button>
+            </div>
+            
+
+            <div class="modal-body">
+                <h3>Assegnazione su <b>@Model.RigaAttivitaPersona.NomeAttività</b></h3>
+
+                <form id="idnuovassegnazione" asp-page-handler="ModAssegnazionePersonale" method="post">
+
+
+                    <input type="hidden" asp-for="@Model.RigaAttivitaPersona.ID" value="@Model.RigaAttivitaPersona.ID" />
+                    <input type="hidden" asp-for="@Model.RigaAttivitaPersona.IDAttività" value="@Model.RigaAttivitaPersona.IDAttività" />
+                    @if (@Model.Modifica)
+                {
+                    @Model.RigaAttivitaPersona.Nome <text>&nbsp;</text>  @Model.RigaAttivitaPersona.Cognome<br />
+                        <input type="hidden" asp-for="@Model.RigaAttivitaPersona.IDPersona" value="@Model.RigaAttivitaPersona.IDPersona" class="form-control" />
+                    }
+                else 
+                {
+
+                        <select asp-for="@Model.StrutturaSelezionata" asp-items="@Model.ListaStrutture" id="listastruttura" class="form-control"></select> <br />
+
+                        <br />
+                        <select asp-for="@Model.RigaAttivitaPersona.IDPersona" id="listapersone" asp-items="@Model.ListaPersone" class="form-control"></select>
+                    
+
+                    }
+                    <p>
+                        Da:<br />
+                        <input asp-for="@Model.RigaAttivitaPersona.DataInizio" value="@Model.RigaAttivitaPersona.DataInizio.ToString("yyyy-MM-dd")" class="form-control" />
+                    </p>
+                    <p>
+                        A:<br />
+                        <input asp-for="@Model.RigaAttivitaPersona.DataFine" value="@Model.RigaAttivitaPersona.DataFine.ToString("yyyy-MM-dd")" class="form-control" />
+                    </p>
+                    <p>
+                        Owner del processo:<br />
+                        @*<input type="checkbox" id="RigaAttivit_Persona_IsOwner" name="RigaAttivitàPersona.IsOwner" value="@Model.RigaAttivitaPersona.IsOwner" />*@
+                        <input type="checkbox" id="RigaAttivitaPersona_IsOwner" name="RigaAttivitaPersona.IsOwner" value="true" class="exclusive-checkbox" data-group="owner" @(Model.RigaAttivitaPersona.IsOwner ? "checked" : "") class="form-control" />
+                        @*<input asp-for="@Model.RigaAttivitaPersona.IsOwner" value="@Model.RigaAttivitaPersona.IsOwner" />*@
+                    </p>
+                    <p>
+                        Ore erogate:<br />
+                        <input asp-for="@Model.RigaAttivitaPersona.OreImpegno" value="@Model.RigaAttivitaPersona.OreImpegno" class="form-control" />
+                    </p>
+                    <br />
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
+                    <button type="submit" class="bottone bottone1" data-save="modal">Salva</button>
+                </form>
+
+            </div>
+            <br />
+
+            <div class="modal-footer">
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+            $("#listastruttura").on("change", function () {
+                var IDStruttura = $(this).val();
+                $("#listapersone").empty();
+                $("#listapersone").append("<option value=''>Seleziona la persona</option>");
+                $.getJSON(`?handler=PersoneinStruttura&idstruttura=${IDStruttura}`, (data) => {
+                    $.each(data, function (i, item) {
+                        let opt = document.createElement("option");
+                        opt.value = item.id; // the index
+                        opt.innerHTML = item.nome;
+                        $("#listapersone").append(opt);
+
+                    });
+                });
+            });
+
+        });
+</script>

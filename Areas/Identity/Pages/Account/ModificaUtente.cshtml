@@ -1,0 +1,120 @@
+﻿@page
+@model SRA.Areas.Identity.Pages.Account.ModificaUtenteModel
+@using System
+
+@{
+    Layout = "/Areas/Identity/Pages/Account/_LayoutGestioneIdentity.cshtml";
+    ViewData["Title"] = "Modifica utente";
+}
+
+<h4>@ViewData["Title"]</h4>
+
+@if (!String.IsNullOrEmpty(Model.StatusMessage))
+{
+    <p style="color:red">@Model.StatusMessage </p>
+}
+<br>
+<a href="./GestioneUtenti">Torna a lista utenti</a>
+<br>
+<div class="row">
+    <div class="col-md-5">
+        <form id="profile-form" method="post">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="@Model.Input.Nome"></label>
+                <input asp-for="@Model.Input.Nome" value="@Model.Input.Nome" readonly class="form-control" />
+            </div>
+            <div class="form-group">
+                <label asp-for="@Model.Input.Cognome"></label>
+                <input asp-for="@Model.Input.Cognome" value="@Model.Input.Cognome" readonly class="form-control" />
+                <input type="hidden" class="form-control" asp-for="@Model.Input.Cognome" />
+            </div>
+            <div class="form-group">
+                <label asp-for="@Model.Input.Struttura"></label>
+                <input asp-for="@Model.Input.Struttura" value="@Model.Input.Struttura" readonly class="form-control" />
+            </div>
+            <div class="form-group">
+                <label asp-for="@Model.Input.Attivo"></label>
+                <input type="checkbox" asp-for="@Model.Input.Attivo" />
+            </div>
+            <div class="form-group">
+                <label asp-for="@Model.Input.DataScadenza"></label>
+                <input asp-for="@Model.Input.DataScadenza" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label asp-for="@Model.Username"></label>
+                <input asp-for="@Model.Username" class="form-control" readonly />
+                <input type="hidden" class="form-control" asp-for="@Model.Input.Username"/>
+            </div>
+            <div class="form-group">
+                <label asp-for="@Model.Input.RuoloContrattuale"></label>
+                <input asp-for="@Model.Input.RuoloContrattuale" value="@Model.Input.RuoloContrattuale" disabled class="form-control" />
+            </div>
+            <div class="form-group">
+                <label asp-for="@Model.Input.SAMAccountName"></label>
+                <input asp-for="@Model.Input.SAMAccountName" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label asp-for="@Model.Input.Email"></label>
+                <span asp-validation-for="@Model.Input.Email" class="text-danger"></span>
+                <input asp-for="@Model.Input.Email" class="form-control" />
+            </div>
+            <div>
+                <label asp-for="@Model.Input.Ruolo"></label>
+                <select asp-for="@Model.Input.Ruolo" asp-items="@Model.ListaRuoliUtente" class="form-control"></select>
+
+            </div>
+
+            @* @for (var i = 0; i < Model.ListaRuoliCB.Count(); i++)
+            {
+                <div class="custom-control custom-checkbox custom-control-inline">
+                    <input type="hidden" class="form-control" asp-for="ListaRuoliCB[i].NomeRuolo" />
+                    <input type="hidden" class="form-control" asp-for="ListaRuoliCB[i].IDRUolo" />
+                    <input class="custom-control-input demo" id="@Model.ListaRuoliCB[i].IDRUolo" asp-for="ListaRuoliCB[i].RuoloAssegnato" />
+                    <label class="custom-control-label" for="@Model.ListaRuoliCB[i].IDRUolo">
+                        @Model.ListaRuoliCB[i].NomeRuolo
+                    </label>
+                </div>
+            } *@
+
+                <br />
+                <button class="bottone bottone1" asp-page-handler="ModificaUtente" type="submit" >Salva</button>
+        </form>
+
+<br />
+<a href="./GestioneUtenti">Torna a lista utenti</a>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+</div>
+</div>
+
+<!-- Modal placeholder -->
+<div id="modal-placeholder-usergroup"></div>
+
+
+<script>
+    $(function () {
+        var placeholderElement = $('#modal-placeholder-usergroup');
+        $('button[data-toggle="ajax-modal-ug"]').click(function (event) {
+            var geturl = 'https://localhost:7218/Identity/Account/ModificaUtente?handler=UtenteGruppoPartial';
+            const username = $(this).attr('data-username');
+            geturl += "&username=";
+            geturl += username;
+            $.get(geturl).done(function (data) {
+                // append HTML to document, find modal and show it
+                //$(document.body).append(data).find('.modal').modal('show');
+                placeholderElement.html(data);
+                placeholderElement.on('show.bs.modal', function () {
+                    $(this).find('.modal-content').css({
+                        width: 'auto',
+                        height: 'auto',
+                        'max-height': '100%'
+                    })
+                });
+                placeholderElement.find('.modal').modal('show');
+            });
+        });
+    });
+
+</script>

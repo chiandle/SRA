@@ -1,0 +1,38 @@
+﻿@model SRA.Models.UtenteeGruppoViewData
+<!-- Modal -->
+<div class="modal fade" id="mod-stato" tabindex="-1" role="dialog" aria-labelledby="addContactLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addContactLabel">Aggiungi utente ad un gruppo</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    
+                </button>
+            </div>
+            
+                <br />
+            <br />
+            Utente: @Model.Nome @Model.Cognome <br />
+            Nome Utente: @Model.UserId
+            <br />
+            <br />
+
+            Gruppo da aggiungere
+                    <br />
+                    <br />
+            <form id="idFormStato" asp-page-handler="ModificaModalePartial">
+                <select id="gruppo" asp-for="@Model.GroupId" asp-items="@Model.ListaGruppi" class="form-control"></select>
+                <input type="hidden" asp-for="@Model.UserId" value="@Model.UserId" />
+                    <br />
+                    <br />
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
+            <button type="submit" class="bottone bottone1" data-save="modal">Salva</button>
+            </form>
+         </div>
+            <br />
+            @*Ultima modifica effettuata da: @Html.DisplayFor(model => model.AutoreUltimaModifica) il @Html.DisplayFor(model => model.DataUltimaModifica)*@
+
+        </div>
+    </div>
+</div>

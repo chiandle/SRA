@@ -1,0 +1,103 @@
+﻿@model SRA.Models.InputAttivitàModel
+<!-- Modal -->
+
+<style>
+    .riquadro {
+        border: 1px solid black; /* Bordo nero di 2px */
+        padding: 10px; /* Spaziatura interna */
+        /*margin: 20px; Spaziatura esterna */
+        width: 400px; /* Larghezza del div */
+        text-align: center; /* Allinea il testo al centro */
+    }
+</style>
+
+<div class="modal fade" id="mod-stato" tabindex="-1" role="dialog" aria-labelledby="addContactLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addContactLabel">Aggiungi Attività</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+
+            <div class="modal-body">
+                <form id="idnuovattività" asp-page-handler="AggiungiAttività" method="post">
+                    Nome <br />
+                    <input asp-for="@Model.Attività.Nome" id="nomeattivita" required title="Il nome è obbligatorio" class="form-control" /> <br />
+                    Tipo Attività<br />
+                    <select id="tipoattività" asp-for="@Model.Attività.Tipologia" asp-items="@Model.ListaTipoAttività" class="form-control"></select><br />
+                    Struttura <br />
+                    <select asp-for="@Model.Attività.CodiceStruttura" asp-items="@Model.ListaStrutture" class="form-control"></select> <br />
+                    Data Inizio<br />
+                    <input asp-for="@Model.Attività.DataInizio" value="@Model.Attività.DataInizio.ToString("yyyy-MM-dd")" class="form-control" /><br />
+                    Data Fine<br />
+                    <input asp-for="@Model.Attività.DataFine" value="@Model.Attività.DataFine.ToString("yyyy-MM-dd")" class="form-control" /><br />
+                    Descrizione <br />
+                    @*<input asp-for="@Model.Attività.Descrizione" type="text" spellcheck="true" class="form-control" /> <br />*@
+                    <span asp-validation-for="@Model.Attività.Descrizione" class="text-danger"></span>
+                    <textarea asp-for="@Model.Attività.Descrizione" rows="4" cols="60" style="resize: vertical;" id="descrizione" required title="La descrizione è obbligatoria"  spellcheck="true"></textarea>
+                    <br />
+                    Applicazioni coinvolte
+                    <div class="riquadro" style="height:200px;width:350px;overflow-y:scroll">
+                        <table>
+                            @for (var i = 0; i < Model.ListaApplicazioni.Count(); i++)
+                            {
+                                <tr>
+                                    <td style="text-align:left">
+                                        <input id="@Model.ListaApplicazioni[i].IDApplicazione" asp-for="@Model.ListaApplicazioni[i].Selezionata" />
+                                        <label class="custom-control-label" for="@Model.ListaApplicazioni[i].IDApplicazione">
+                                            @Model.ListaApplicazioni[i].Nome
+                                        </label>
+                                        <input type="hidden" asp-for="@Model.ListaApplicazioni[i].IDApplicazione" value="@Model.ListaApplicazioni[i].IDApplicazione" />
+                                        <input type="hidden" asp-for="@Model.ListaApplicazioni[i].Nome" value="@Model.ListaApplicazioni[i].Nome" />
+                                    </td>
+                                </tr>
+                            }
+                        </table>
+                       
+                    </div>
+                    <br />
+
+                    <input type="hidden" asp-for="Attività.ID" value="@Model.Attività.ID" />
+                    <input type="hidden" asp-for="AnnoSelezionato" value="@Model.AnnoSelezionato" />
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
+                    <button type="submit" class="bottone bottone1">Salva</button>
+                    
+                </form>
+            </div>
+            <br />
+           
+            <div class="modal-footer">
+
+                @{
+                    DateTime? dataUltimaModifica = Model.Attività.DataUltimaModifica;
+                    string formattedDateTime = dataUltimaModifica.HasValue ? dataUltimaModifica.Value.ToString("dd/MM/yyyy HH:mm") : "Data non disponibile";
+                }
+
+                Modificata da @Model.Attività.AutoreUltimaModifica il @formattedDateTime
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    
+    $().ready(function () {
+        $("#idnuovattività").validate({
+            rules: {
+                NomeAttivita: {
+                    required },
+                Descrizione: {
+                    required } 
+            },
+            messages: {
+             NomeAttivita: {required: "Il nome non può essere vuoto"},
+             Descrizione: {required: "La descrizione non può essere vuota"}
+            }
+        });
+    });
+
+
+</script>

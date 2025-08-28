@@ -1,0 +1,58 @@
+﻿@model SRA.Models.InputImpattoMisureModel
+<!-- Modal -->
+<div class="modal fade" id="mod-stato" tabindex="-1" role="dialog" aria-labelledby="addContactLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addContactLabel">Aggiungi/Modifica Impatto Misura</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    
+                </button>
+            </div>
+
+
+            <div class="modal-body">
+                <form id="idnuovaImpattoMisura" asp-page-handler="AggModImpattoMisura" method="post">
+                    Misura <br />
+                    <select asp-for="@Model.ImpattoMisura.IDMisura" asp-items="@Model.ListaMisure" class="form-control"></select><br /><br /><br />
+                    Rischio<br />
+                    <select id="rischiomodal" asp-for="@Model.ImpattoMisura.IDRischio" asp-items="@Model.ListaRischi" class="form-control"></select><br /><br /><br />
+                    Applicazione<br />
+                    <select id="applicazionemodal" asp-for ="@Model.ImpattoMisura.IDApplicazione" asp-items="@Model.ListaApplicazioni" class="form-control"></select><br /><br /><br />
+                    <br />
+                    Motivazione<br />
+                    <input asp-for="@Model.ImpattoMisura.Motivazione" class="form-control" />
+                    <br />
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
+                    <button type="submit" class="bottone bottone1" data-save="modal">Salva</button>
+                </form>
+
+            </div>
+            <br />
+
+            <div class="modal-footer">
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $("#rischiomodal").on("change", function () {
+            var IDrischio = $(this).val();
+            $("#applicazionemodal").empty();
+            $("#applicazionemodal").append("<option value=''>Seleziona l'applicazione</option>");
+            $.getJSON(`?handler=ApplicazioniRischi&idrischio=${IDrischio}`, (data) => {
+                $.each(data, function (i, item) {
+                    let opt = document.createElement("option");
+                    opt.value = item.id; // the index
+                    opt.innerHTML = item.nome;
+                    $("#applicazionemodal").append(opt);
+
+                });
+            });
+        })
+    });
+</script>

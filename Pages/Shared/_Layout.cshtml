@@ -1,0 +1,98 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using SRA.Areas.Identity.Data
+@using SRA.Models
+@using Microsoft.Extensions.Configuration
+@inject SignInManager<SRAUser> SignInManager
+@inject UserManager<SRAUser> UserManager
+@inject RoleManager<IdentityRole> RoleManager
+@inject IConfiguration Configuration
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>UAPI - Censimento e Attività</title>
+    <link rel="icon" href="https://www.uniroma3.it/wp-content/uploads/2024/12/cropped-RomaTre_simbolo_rgb-32x32.png" sizes="32x32">
+    <meta name="msapplication-TileImage" content="https://www.uniroma3.it/wp-content/uploads/2024/12/cropped-RomaTre_simbolo_rgb-270x270.png">
+    <environment include="Development">
+        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+        <link rel="stylesheet" href="~/css/datatables.css" />
+        <link rel="stylesheet" href="~/css/site.css" />
+    </environment>
+    <environment exclude="Development">
+        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="~/css/datatables.min.css" />
+        <link rel="stylesheet" href="~/css/site.css" />
+    </environment>
+    <style>
+        header {
+        }
+
+        body {
+            background: linear-gradient(#ffffff, #e9f3fb);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav class="navbar navbar-expand-sm">
+                <a class="navbar-brand" asp-area="" asp-page="/Index"><img src="/Images/Logo_Roma_Tre_Header.png" width="220" height="62" alt="Logo Intestazione"></a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-start" id="navbarSupportedContent">
+                <ul class="navbar-nav">
+                        <li class="nav-item"><a asp-page="/Index" class="nav-link">Home</a></li>
+                        <li class="nav-item"><a asp-page="/CensimentoIT" class="nav-link">Censimento IT</a></li>
+                        <li class="nav-item"><a asp-page="/Attività/IndexElencoAttività" class="nav-link">Attività</a></li>
+                        <li class="nav-item"><a asp-page="/AnalisiRischi" class="nav-link">Analisi dei rischi</a></li>
+                        @if (SignInManager.IsSignedIn(User) && User.IsInRole("Amministratore"))
+                    {
+                        <li class="nav-item">
+                                <a class="nav-link text-dark" href="/Identity/Account/GestioneUtenti" class="nav-link">Amministrazione</a>
+                        </li>
+
+                    }
+                </ul>
+                    @if (SignInManager.IsSignedIn(User))
+                    {
+                        <div class="dropdown ms-auto">
+                            <button class="bottone bottone1 dropdown-toggle" type="button" id="userMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                @UserManager.GetUserName(User)
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userMenuButton">
+                                <li>
+                                    <form method="post" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/", new { area = "" })">
+                                        <button type="submit" class="dropdown-item">Logout</button>
+                                    </form>
+
+                                </li>
+                            </ul>
+                        </div>
+
+                    }
+            </div>
+            </nav>
+        </div>
+   
+    </header>
+    <partial name="_CookieConsentPartial" />
+
+    <div class="container">
+        @RenderBody()
+        <hr />
+        <footer>
+            <p>&copy; 2025 - SRA</p>
+        </footer>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.js"></script>
+    <script src="~/lib/datatables/datatables.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+    <script src="~/js/site.js"></script>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

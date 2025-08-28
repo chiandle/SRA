@@ -1,0 +1,82 @@
+﻿@page
+@model SRA.Areas.Identity.Pages.Account.GestioneRuoliModel
+@{
+     Layout = "/Areas/Identity/Pages/Account/_LayoutGestioneIdentity.cshtml";
+     ViewData["Title"] = "Gestione Ruoli";
+}
+
+
+@if (!String.IsNullOrEmpty(Model.StatusMessage))
+{
+    <p style="color:red">@Model.StatusMessage </p>
+}
+
+<div class="row">
+    <div class="col-md-6">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        Nome Ruolo
+                    </th>
+                    <th>
+                        Ruolo assegnato
+                    </th>
+                    <th>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.ListaRuoliMgt.Count()>0)
+                {
+                @for (var i = 0; i < Model.ListaRuoliMgt.Count(); i++)
+                {
+                    <tr>
+                        <td>
+                            @Model.ListaRuoliMgt[i].NomeRuolo
+                        </td>
+                        <td>
+                            @if (Model.ListaRuoliMgt[i].RuoloAssegnato)
+                            {
+                                <p>Ruolo assegnato</p>
+                            }
+                            else
+                            {
+                                <p>Ruolo non assegnato</p>
+                            }
+                        </td>
+                        <td>
+                            @if (Model.ListaRuoliMgt[i].RuoloAssegnato)
+                            {
+                                <p></p>
+                            }
+                            else
+                            {
+                                <form method="post">
+                                    <input type="hidden" class="form-control" asp-for="@Model.ListaRuoliMgt[i].NomeRuolo" name="nomeRuolo" />
+                                    <input asp-page-handler="EliminaRuolo" method="post" class="button" type="submit" value="Elimina" />
+                                </form>
+                            }
+                        </td>
+                    </tr>
+                }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+<p>Aggiungi un ruolo</p>
+<div class="row">
+    <div class="col-md-3">
+        <form method="post">
+            <div class="form-group">
+                <input asp-for="inputRuolo.NomeRuolodaCreare" class="form-control" name="nomeRuolo" />
+                <span asp-validation-for="inputRuolo.NomeRuolodaCreare" class="text-danger"></span>
+            </div>
+            <button asp-page-handler="CreaRuolo" type="submit" class="btn">Crea ruolo</button>
+        </form>
+    </div>
+</div>
+

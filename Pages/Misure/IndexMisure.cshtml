@@ -1,0 +1,111 @@
+﻿@page
+@model SRA.Pages.Misure.IndexMisureModel
+@{
+    ViewData["Title"] = "Index";
+
+}
+<h2>Elenco dei Misure</h2>
+
+<p>
+    <button type="button" class="bottone bottone1" data-toggle="ajax-modal-aggmisura">
+        Aggiungi
+    </button>
+</p>
+<table id="tblMisure" class="display table table-hover table-striped table-bordered table-sm">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Misure[0].Nome)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Misure[0].DataAttivazione)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Misure[0].DataDisattivazione)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Misure[0].Descrizione)
+            </th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Misure)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nome)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DataAttivazione)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DataDisattivazione)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Descrizione)
+                </td>
+                <td></td>
+                <td>
+                    <button type="button" class="bottone bottone1" data-toggle="ajax-modal-modmisura" data-idmisura="@item.ID">
+                        Modifica
+                    </button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<!-- Modal placeholder -->
+<div id="modal-placeholder-misure"></div>
+
+
+@section Scripts {
+    <script>
+
+                        $(document).ready(function () {
+                            $('#tblMisure').DataTable({
+                                // Opzioni di configurazione
+                                paging: false,          // Abilita la paginazione
+                                searching: true,       // Abilita la ricerca
+                                ordering: true,        // Abilita l'ordinamento delle colonne
+                            }
+                            );
+                        });
+
+        $(function () {
+            var placeholderElement = $('#modal-placeholder-misure');
+            $('button[data-toggle="ajax-modal-aggmisura"]').click(function (event) {
+                var geturl = `${window.location.protocol}//${window.location.hostname}${window.location.port ? `:${window.location.port}` : ''}`;
+                var urldettaglio = '/Misure/IndexMisure?handler=AggiungiModalePartial';
+                geturl += urldettaglio;
+
+                $.get(geturl).done(function (data) {
+                    // append HTML to document, find modal and show it
+                    //$(document.body).append(data).find('.modal').modal('show');
+                    placeholderElement.html(data);
+                    placeholderElement.find('.modal').modal('show');
+                });
+            });
+        });
+
+        $(function () {
+            var placeholderElement = $('#modal-placeholder-misure');
+            $('button[data-toggle="ajax-modal-modmisura"]').click(function (event) {
+                var geturl = `${window.location.protocol}//${window.location.hostname}${window.location.port ? `:${window.location.port}` : ''}`;
+                var urldettaglio = '/Misure/IndexMisure?handler=AggiungiModalePartial';
+                geturl += urldettaglio;
+                        const idMisura = $(this).attr('data-idmisura');
+                        geturl += "&idmisura=";
+                geturl += idMisura;
+                $.get(geturl).done(function (data) {
+                    // append HTML to document, find modal and show it
+                    //$(document.body).append(data).find('.modal').modal('show');
+                    placeholderElement.html(data);
+                    placeholderElement.find('.modal').modal('show');
+                });
+            });
+        });
+    </script>
+}

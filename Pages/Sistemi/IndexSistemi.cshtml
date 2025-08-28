@@ -1,0 +1,124 @@
+﻿@page
+@model SRA.Pages.Sistemi.IndexSistemiModel
+@{
+    ViewData["Title"] = "Index";
+
+}
+<h2>Elenco dei Sistemi/Ambienti</h2>
+
+<p>
+<button type="button" class="bottone bottone1" data-toggle="ajax-modal-aggsistema">
+    Aggiungi
+</button>
+</p>
+<table id="tblsistemi" class="display table table-hover table-striped table-bordered table-sm">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Sistemi[0].Nome)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Sistemi[0].SistemaOperativo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Sistemi[0].Inproduzione)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Sistemi[0].DataDismissione)
+            </th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Sistemi)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nome)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SistemaOperativo)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Inproduzione)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DataDismissione)
+                </td>
+                <td>
+                    <button type="button" class="bottone bottone1" data-toggle="ajax-modal-modsistema" data-idsistema="@item.ID">
+                        Modifica
+                    </button>
+                </td>
+                <td>
+                    <form method="get">
+                        <input type="hidden" name="handler" value="EliminaSistema" />
+                        <input type="hidden" name="idsistema" value="@item.ID" />
+                        <button type="submit" class="btn btn-danger" data-toggle="elimina">Elimina</button>
+                    </form>
+                    
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<!-- Modal placeholder -->
+<div id="modal-placeholder-sistemi"></div>
+
+@section Scripts {
+    <script>
+                $(function() {
+            $('button[data-toggle="elimina"]').click(function(e) {
+                var confirmed = confirm('Sei sicuro?');
+                if (!confirmed) {
+                    e.preventDefault(); // Annulla l'invio del modulo
+                }
+            });
+        });
+
+        $(document).ready(function () {
+            $('#tblsistemi').DataTable({
+                // Opzioni di configurazione
+                paging: false,          // Abilita la paginazione
+                searching: true,       // Abilita la ricerca
+                ordering: true,        // Abilita l'ordinamento delle colonne
+            }
+            );
+        });
+                $(function () {
+            var placeholderElement = $('#modal-placeholder-sistemi');
+            $('button[data-toggle="ajax-modal-aggsistema"]').click(function (event) {
+                var geturl = `${window.location.protocol}//${window.location.hostname}${window.location.port ? `:${window.location.port}` : ''}`;
+                var urldettaglio = '/Sistemi/IndexSistemi?handler=AggiungiModalePartial';
+                geturl += urldettaglio;
+                $.get(geturl).done(function (data) {
+                    // append HTML to document, find modal and show it
+                    //$(document.body).append(data).find('.modal').modal('show');
+                    placeholderElement.html(data);
+                    placeholderElement.find('.modal').modal('show');
+                });
+            });
+        });
+
+        $(function () {
+            var placeholderElement = $('#modal-placeholder-sistemi');
+            $('button[data-toggle="ajax-modal-modsistema"]').click(function (event) {
+                var geturl = `${window.location.protocol}//${window.location.hostname}${window.location.port ? `:${window.location.port}` : ''}`;
+                var urldettaglio = '/Sistemi/IndexSistemi?handler=AggiungiModalePartial';
+                geturl += urldettaglio;
+                const idsistema = $(this).attr('data-idsistema');
+                geturl += "&idsistema=";
+                geturl += idsistema;
+                $.get(geturl).done(function (data) {
+                    // append HTML to document, find modal and show it
+                    //$(document.body).append(data).find('.modal').modal('show');
+                    placeholderElement.html(data);
+                    placeholderElement.find('.modal').modal('show');
+                });
+            });
+        });
+
+    </script>
+}

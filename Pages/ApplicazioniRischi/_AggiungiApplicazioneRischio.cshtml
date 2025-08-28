@@ -1,0 +1,64 @@
+﻿@model SRA.Models.InputApplicazioneRischioModel
+<!-- Modal -->
+<div class="modal fade" id="mod-stato" tabindex="-1" role="dialog" aria-labelledby="addContactLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addContactLabel">Aggiungi Applicazione</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    
+                </button>
+            </div>
+
+
+            <div class="modal-body">
+                <form id="applicazione" asp-page-handler="AggiungiApplicazioneRischio" method="post">
+                    Applicazione<br />
+                    <select id="cmbapplicazione" asp-for="@Model.IDApplicazione" asp-items="@Model.ListaApplicazioni" class="form-control"></select><br />
+                    Rischio
+                    <select id="cmbrischio" asp-for="@Model.IDRischio" class="form-control"></select><br />
+                    <br />
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
+                    <button type="submit" class="bottone bottone1" data-save="modal">Salva</button>
+                </form>
+                
+            </div>
+            <br />
+           
+            <div class="modal-footer">
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<script>
+    $(document).ready(function () {
+        const applicazioneSelect = $('#cmbapplicazione');
+        const rischioSelect = $('#cmbrischio');
+
+        // Aggiorna la lista dei rischi non ancora associati quando si seleziona l'applicazione
+        applicazioneSelect.on('change', function () {
+            const IDApplicazione = $(this).val();
+
+            // Svuota la dropdown delle stanze
+            rischioSelect.empty().append('<option value="">Seleziona il rischio</option>');
+
+            if (IDApplicazione) {
+                $.ajax({
+                    url: './IndexApplicazioniRischi?handler=ElencoRischiDisponibili',
+                    method: 'GET',
+                    data: { idapplicazione: IDApplicazione },
+                    dataType: 'json',
+                    success: function (data) {
+                        data.forEach(function (rischio) {
+                            rischioSelect.append(new Option(rischio.NomeRischio, rischio.IDRischio));
+                        });
+                    }
+                });
+            }
+        });
+    });
+</script>

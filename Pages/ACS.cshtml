@@ -1,0 +1,18 @@
+﻿@page
+@model SRA.Pages.ACSModel
+@{
+    ViewData["Title"] = "ACS";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+
+<h2>ACS</h2>
+Lo stato è
+@ViewData["RelayState"];
+
+
+<br />
+
+Mentre la risposta e:
+<br />
+
+@ViewData["SAMLResponse"];

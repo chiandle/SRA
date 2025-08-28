@@ -1,0 +1,88 @@
+﻿@model SRA.Models.InputAttivitàModel
+<!-- Modal -->
+<div class="modal fade" id="mod-stato" tabindex="-1" role="dialog" aria-labelledby="largeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addContactLabel">Assegna il personale</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    
+                </button>
+            </div>
+            
+
+            <div class="modal-body">
+                <form id="idnuovattività" asp-page-handler="ModAttivitàPersonale" method="post">
+                    <table style="width:100%">
+                        <thead>
+                            <tr>
+                                <th style="text-align:center">Assegnato</th>
+                                <th style="text-align:center">Nominativo</ths>
+                                <th style="text-align:center">Data Inizio</th>
+                                <th style="text-align:center">Data Fine</th>
+                                <th style="text-align:center">Ore impegno</th>
+                                <th style="text-align:center">Owner</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (var i = 0; i < Model.ListaPersone.Count(); i++)
+                            {
+                                <tr>
+                                    
+                                    <td style="text-align:center;">
+                                        <input type="checkbox" name="ListaPersone[@i].Selezionata" value="true" @(Model.ListaPersone[i].Selezionata ? "checked" : "") />
+                                         </td>
+                                    <td style="text-align:center;">
+                                        @Model.ListaPersone[i].Nome
+                                    </td>
+                                    <td style="text-align:center;">
+                                        <input asp-for="@Model.ListaPersone[i].DataInizio" type="date" value="@Model.ListaPersone[i].DataInizio.ToString("yyyy-MM-dd")" />
+                                        </td>
+                                    <td style="text-align:center;">
+                                        <input asp-for="@Model.ListaPersone[i].DataFine" type="date" value="@Model.ListaPersone[i].DataFine.ToString("yyyy-MM-dd")" />
+                                    </td>
+                                    <td style="text-align:center; padding: 5px;">
+                                        <input asp-for="@Model.ListaPersone[i].OreImpegno" value="@Model.ListaPersone[i].OreImpegno"  />
+                                    </td>
+                                    <td style="text-align:center; ">
+                                        <input type="checkbox" id="isOwner_@i" name="ListaPersone[@i].IsOwner" value="true" class="exclusive-checkbox" data-group="owner" @(Model.ListaPersone[i].IsOwner ? "checked" : "") />
+                                        <input type="hidden" asp-for="@Model.ListaPersone[i].IDPersona" value="@Model.ListaPersone[i].IDPersona" />
+                                        <input type="hidden" asp-for="@Model.ListaPersone[i].Nome" value="@Model.ListaPersone[i].Nome" />
+                                    </td>
+
+                                </tr>
+                            }
+
+                        </tbody>
+                    </table>
+                    <br />
+                    <input type="hidden" asp-for="@Model.Attività.ID" value="@Model.Attività.ID" />
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
+                    <button type="submit" class="bottone bottone1" data-save="modal">Salva</button>
+                </form>
+
+            </div>
+            <br />
+
+            <div class="modal-footer">
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    document.querySelectorAll(".exclusive-checkbox").forEach((checkbox) => {
+        checkbox.addEventListener("change", function () {
+            const group = this.dataset.group;
+            document.querySelectorAll(`.exclusive-checkbox[data-group="${group}"]`).forEach((cb) => {
+                if (cb !== this) {
+                    cb.checked = false;
+                }
+            });
+        });
+    });
+
+
+</script>

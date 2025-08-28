@@ -1,0 +1,94 @@
+﻿@page
+@model SRA.Pages.Attività.AttivitàPersoneModel
+@{
+}
+<p><h1>@Model.Attività.Nome</h1></p>
+<p>Da @Model.Attività.DataInizio.ToString("dd/MM/yyyy") a  @Model.Attività.DataFine.ToString("dd/MM/yyyy")</p>
+<p> Ower attuale: &nbsp; @Model.OwnerCorrente</p>
+<p>
+    @if (!Model.ListaPersone.Any())
+    {
+        <text>Nessun personale è assegnato all'attività</text>
+    }
+</p>
+<p>
+    <table style="table-layout: fixed; width: 100%; ">
+        <thead>
+            <tr>
+                <th style="text-align:center">Nome</th>
+                <th style="text-align:center">Cognome</ths>
+                <th style="text-align:center">Periodi</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.ListaPersone)
+            {
+                <tr style="border-bottom: 1px solid black;">
+                    <td style="text-align:center; height: 100px; ">
+                        @Html.DisplayFor(modelItem => item.Nome)
+                    </td>
+                    <td style="text-align:center;">
+                        @Html.DisplayFor(modelItem => item.Cognome)
+                    </td>
+                    <td style="text-align:center;">
+                        <table style="border-spacing: 10px; ">
+                            <tbody>
+                                @foreach (var ap in Model.ListaAttivitàPersone.Where(a => a.IDAttività == Model.Attività.ID & a.IDPersona == item.ID))
+                                {
+                                    <tr>
+                                        <td style="border-spacing: 10px; padding: 15px;">@Html.DisplayFor(modelItem => ap.DataInizio)</td>
+                                        <td style="border-spacing: 10px; padding: 15px;">@Html.DisplayFor(modelItem => ap.DataFine)</td>
+                                        <td style="border-spacing: 10px; padding: 15px;">@Html.DisplayFor(modelItem => ap.OreImpegno)</td>
+                                        <td style="border-spacing: 10px; padding: 15px;">@Html.DisplayFor(modelItem => ap.IsOwner)</td>
+                                        <td style="border-spacing: 10px; padding: 15px;">
+                                            <button type="button" class="bottone bottone1" data-toggle="ajax-modal-modassegnazione" data-idriga="@ap.ID" data-idattivita="@Model.Attività.ID" data-idpersona="@item.ID">
+                                                Modifica
+                                            </button>
+                                        </td>
+                                        <td>
+                                            <form asp-page-handler="Elimina" method="post">
+                                                <input type="hidden" name="idriga" value="@ap.ID" />
+                                                <input type="hidden" name="idattivita" value="@Model.Attività.ID" />
+                                                <button type="submit" class="btn btn-danger" data-toggle="elimina">
+                                                    Elimina
+                                                </button>
+                                            </form>
+                                        </td>
+                                    </tr>
+
+                                }
+                            </tbody>
+                        </table>
+                    </td>
+                    <td>
+                    </td>
+                </tr>
+            }
+
+        </tbody>
+
+    </table>
+</p>
+<p>
+    <button type="button" class="bottone bottone1" data-toggle="ajax-modal-aggassegnazione" data-idattivita="@Model.Attività.ID">
+        Aggiungi riga
+    </button>
+</p>
+
+<div id="modal-placeholder-assegnazioni"></div>
+
+@section Scripts {
+    <script>
+        $(function() {
+                $('button[data-toggle="elimina"]').click(function(e) {
+                    var confirmed = confirm('Sei sicuro?');
+                    if (!confirmed) {
+                        e.preventDefault(); // Annulla l'invio del modulo
+                    }
+                });
+            });
+
+
+    </script>
+}

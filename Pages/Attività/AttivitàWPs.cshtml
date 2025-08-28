@@ -1,0 +1,92 @@
+﻿@page
+@model SRA.Pages.Attività.AttivitàWPsModel
+@{
+}
+
+
+<style>
+    .completato {
+        color: #d3d3d3; /* Colore grigio */
+    }
+</style>
+
+
+<p><h1>Attività : @Model.Attività.Nome</h1></p>
+<p>Da @Model.Attività.DataInizio.ToString("dd/MM/yyyy") a  @Model.Attività.DataFine.ToString("dd/MM/yyyy")</p>
+<br />
+<p>
+    <button type="button" class="bottone bottone1" data-toggle="ajax-modal-aggwp" data-idattivita="@Model.Attività.ID">
+        Aggiungi riga
+    </button>
+</p>
+<br />
+@if(Model.ListaWPs.Count() > 0)
+{
+    <p>
+        <table style="table-layout: fixed; width: 100%; ">
+            <thead>
+                <tr>
+                    <th style="text-align:center">Nome WP</th>
+                    <th style="text-align:center">Descrizione</th>
+                    <th style="text-align:center">Data Inizio</th>
+                    <th style="text-align:center">Data Fine</th>
+                    <th style="text-align:center">Notifiche</th>
+                    <th style="text-align:center">Giorni Preavviso</th>
+                    <th style="text-align:center">Intervallo notifiche</th>
+                    <th style="text-align:center">Completato</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var ap in Model.ListaWPs)
+                {
+                    <tr class="@((ap.Completato ? "completato" : ""))">
+                        <td style="border-spacing: 10px; padding: 15px;">@Html.DisplayFor(modelItem => ap.Nome)</td>
+                        <td style="border-spacing: 10px; padding: 15px;">@Html.DisplayFor(modelItem => ap.Descrizione)</td>
+                        <td style="border-spacing: 10px; padding: 15px;">@Html.DisplayFor(modelItem => ap.DataInizio)</td>
+                        <td style="border-spacing: 10px; padding: 15px;">@Html.DisplayFor(modelItem => ap.DataFine)</td>
+                        <td style="border-spacing: 10px; padding: 15px;">@Html.DisplayFor(modelItem => ap.Notifiche)</td>
+                        <td style="border-spacing: 10px; padding: 15px;">@Html.DisplayFor(modelItem => ap.GiorniPreavviso)</td>
+                        <td style="border-spacing: 10px; padding: 15px;">@Html.DisplayFor(modelItem => ap.GiorniNotifiche)</td>
+                        <td style="border-spacing: 10px; padding: 15px;">@Html.DisplayFor(modelItem => ap.Completato)</td>
+                        <td style="border-spacing: 10px; padding: 15px;">
+                            <button type="button" class="bottone bottone1" data-toggle="ajax-modal-modwp" data-idattivita="@Model.Attività.ID" data-idwp="@ap.ID">
+                                Modifica
+                            </button>
+                        </td>
+                        <td style="border-spacing: 10px; padding: 15px;">
+                            <form method="get">
+                                <input type="hidden" name="handler" value="EliminaWP" />
+                                <input type="hidden" name="idattivita" value="@Model.Attività.ID" />
+                                <input type="hidden" name="idwp" value="@ap.ID" />
+                                <button type="submit" data-toggle="elimina" class="btn btn-danger">Elimina</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+
+
+            </tbody>
+
+        </table>
+    </p>
+
+}
+   
+
+
+<div id="modal-placeholder-assegnazioni"></div>
+
+
+@section Scripts {
+    <script>
+                         $(function() {
+            $('button[data-toggle="elimina"]').click(function(e) {
+                var confirmed = confirm('Sei sicuro?');
+                if (!confirmed) {
+                    e.preventDefault(); // Annulla l'invio del modulo
+                }
+            });
+        });
+        </script>}

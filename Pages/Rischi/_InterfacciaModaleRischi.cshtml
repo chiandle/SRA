@@ -1,0 +1,47 @@
+﻿@model SRA.Models.InputRischiModel
+<!-- Modal -->
+<div class="modal fade" id="mod-stato" tabindex="-1" role="dialog" aria-labelledby="addContactLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addContactLabel">Aggiungi/Modifica Rischio</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    
+                </button>
+            </div>
+
+
+            <div class="modal-body">
+                <form id="idnuovarischio" asp-page-handler="AggModRischio" method="post">
+                    Nome Rischio<br />
+                    <input asp-for="@Model.Rischio.Nome" class="form-control" />
+                    <br />
+                    Descrizione <br />
+                    <input asp-for="@Model.Rischio.DescrizioneRischio" class="form-control" />
+                    <br />
+                    Rischio Globale
+                    <input asp-for="@Model.Rischio.Globale" /> <br /><br />
+                    Tipologia di Rischio
+                    <select id="tiporischio" asp-for="@Model.Rischio.IDTipoRischio" asp-items="@Model.ListaTipiRischio" class="form-control"></select><br /><br />
+                    <br />
+                    <input type="hidden" asp-for="Rischio.ID" value="@Model.Rischio.ID" /><br /><br />
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
+                    <button type="submit" class="bottone bottone1" data-save="modal">Salva</button>
+                </form>
+
+            </div>
+            <br />
+
+            <div class="modal-footer">
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+
+
+
+</script>

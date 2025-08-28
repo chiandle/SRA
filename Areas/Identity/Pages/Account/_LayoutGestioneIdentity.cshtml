@@ -1,0 +1,27 @@
+﻿@{ 
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+
+<h2>Gestisci utenti e ruolo</h2>
+
+<div>
+    <h4>Naviga</h4>
+    <hr />
+    <div class="row">
+        <div class="col-md-3">
+            <a href="./GestioneUtenti">Lista utenti</a>
+            <br />
+            <a href="./GestioneRuoli">Gestione ruoli</a>
+            <br />
+            <a href="./GestioneGruppi" >Gestione gruppi</a>
+        </div>
+        <div class="col-md-9">
+            @RenderBody()
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @RenderSection("Scripts", required: false)
+}
+

@@ -1,0 +1,96 @@
+﻿@page
+@model SRA.Areas.Identity.Pages.Account.GestioneUtentiModel
+@{
+    Layout = "/Areas/Identity/Pages/Account/_LayoutGestioneIdentity.cshtml";
+    ViewData["Title"] = "Profile";
+
+}
+
+@if(String.IsNullOrEmpty(Model.Ruolo))
+{
+    <form action="./RegistraUtente">
+        <input type="submit" value="Crea Nuovo" class="bottone bottone1">
+    </form>
+    <br />
+    <hr />
+
+}
+
+<table id="tblutenti" class="display table table-hover table-striped table-bordered table-sm">
+        <thead>
+            <tr>
+                <th>
+                    <a asp-page="./GestioneUtenti" asp-route-Ordinamento="@Model.OrdinaCognome">
+                        @Html.DisplayNameFor(model => model.ListaUtenti[0].Cognome)
+                    </a>
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ListaUtenti[0].Nome)
+                </th>
+                <th>
+                    <a asp-page="./GestioneUtenti" asp-route-Ordinamento="@Model.OrdinaUsername">
+                        @Html.DisplayNameFor(model => model.ListaUtenti[0].UserName)
+                    </a>
+
+                </th>
+                <th>
+                    <a asp-page="./GestioneUtenti" asp-route-Ordinamento="@Model.OrdinaStruttura">
+                        @Html.DisplayNameFor(model => model.ListaUtenti[0].Struttura)
+                    </a>
+                </th>
+                <th>
+                    <a asp-page="./GestioneUtenti" asp-route-Ordinamento="@Model.OrdinaStruttura">
+                        @Html.DisplayNameFor(model => model.ListaUtenti[0].Attivo)
+                    </a>
+                </th>
+</thead>
+        <tbody>
+            @foreach (var item in Model.ListaUtenti)
+            {
+            <tr>
+                <td>
+                    <a asp-page="./ModificaUtente" asp-route-username="@item.UserName"> @Html.DisplayFor(modelItem => item.Cognome)</a>
+                </td>
+                <td>
+                    <a asp-page="./ModificaUtente" asp-route-username="@item.UserName"> @Html.DisplayFor(modelItem => item.Nome)</a>
+                </td>
+                <td>
+                    <a asp-page="./ModificaUtente" asp-route-username="@item.UserName"> @Html.DisplayFor(modelItem => item.UserName)</a>
+                </td>
+                <td>
+                    <a asp-page="./ModificaUtente" asp-route-username="@item.UserName"> @Html.DisplayFor(modelItem => item.Struttura)</a>
+                </td>
+                <td>
+                    <a asp-page="./ModificaUtente" asp-route-username="@item.UserName"> @Html.DisplayFor(modelItem => item.Attivo)</a>
+                </td>
+                <td>
+                    <a asp-page="./ModificaUtente" asp-route-username="@item.UserName"> @Html.DisplayFor(modelItem => item.DataScadenza)</a>
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+                var table = $('#tblutenti').DataTable({
+                    // Opzioni di configurazione
+                    paging: false,          // Abilita la paginazione
+                    searching: true,       // Abilita la ricerca
+                    ordering: true,        // Abilita l'ordinamento delle colonne
+                    order: [],
+                    columnDefs: [
+                { orderable: false, targets: [4] }, // Indici delle colonne da escludere dall'ordinamento
+                { type: 'date-euro', targets: [5] }
+            ]
+                }
+                );
+                // Impedisci la propagazione dell'evento di clic sugli input
+            $('#tblattivita thead tr:eq(0) input').on('click', function(event) {
+                event.stopPropagation();
+                });
+        });
+    </script>
+}

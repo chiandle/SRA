@@ -1,0 +1,88 @@
+﻿@page
+@model LoginModel
+
+@{
+    Layout = "_LayoutStartPage";
+    ViewData["Title"] = "Analisi dei Rischi";
+}
+<style>
+    .bottone {
+        background-color: #0e2661;
+        border-radius: 8px;
+        padding: 4px 12px;
+        color: white;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        transition-duration: 0.4s;
+        cursor: pointer;
+    }
+
+    .bottone1 {
+        background-color: #0e2661;
+        color: white;
+        border: 2px solid #0e2661;
+    }
+
+        .bottone1:hover {
+            background-color: white;
+            color: #092341;
+        }
+
+</style>
+<h1>@ViewData["Pagina di Accesso"]</h1>
+<div class="row">
+    <div class="col-md-4">
+        <section>
+            <form id="account" method="post">
+                <h2>Accedi con l'utenza istituzionale di Roma Tre</h2>
+                <hr />
+                @if (!String.IsNullOrEmpty(Model.ErrorMessage))
+                {
+                    <div style="color: red">@Model.ErrorMessage</div>
+                }
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-floating">
+                    <input asp-for="Input.NomeUtente" class="form-control" autocomplete="username" aria-required="true" />
+                    <label asp-for="Input.NomeUtente" class="form-label"></label>
+                    <span asp-validation-for="Input.NomeUtente" class="text-danger"></span>
+                </div>
+                <div class="form-floating">
+                    <input asp-for="Input.Password" class="form-control" autocomplete="current-password" aria-required="true" />
+                    <label asp-for="Input.Password" class="form-label"></label>
+                    <span asp-validation-for="Input.Password" class="text-danger"></span>
+                </div>
+                @* <div>
+                    <div class="checkbox">
+                        <label asp-for="Input.RememberMe" class="form-label">
+                            <input class="form-check-input" asp-for="Input.RememberMe" />
+                            @Html.DisplayNameFor(m => m.Input.RememberMe)
+                        </label>
+                    </div>
+                </div> *@
+                <div>
+                    <br />
+                    <button id="login-submit" type="submit" class="bottone bottone1">Accedi</button>
+                </div>
+                <br />
+                @*<div>
+                <p>
+                <a id="forgot-password" asp-page="./ForgotPassword">Dimenticata la password?</a>
+                </p>
+
+                <p>
+                <a id="resend-confirmation" asp-page="./ResendEmailConfirmation">Invia nuovamente email di conferma</a>
+                </p>
+                </div>*@
+            </form>
+
+
+        </section>
+    </div>
+</div>
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

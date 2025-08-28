@@ -1,0 +1,118 @@
+﻿@page
+@model SRA.Pages.BasiDati.IndexModel
+
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Elenco Basi di dati</h2>
+
+<p>
+    <button type="button" class="bottone bottone1" data-toggle="ajax-modal-aggbasedati">
+        Aggiungi
+    </button>
+</p>
+<table id="tblbasidati" class="table table-hover table-striped table-bordered table-sm">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.BasiDati[0].Nome)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BasiDati[0].Descrizione)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BasiDati[0].Sistema)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BasiDati[0].DBMS)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.BasiDati)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nome)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelitem => item.Descrizione)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Sistema)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DBMS)
+                </td>
+                <td>
+                    <button type="button" class="bottone bottone1" data-toggle="ajax-modal-modbasedati" data-idbasedati="@item.ID">
+                        Modifica
+                    </button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<!-- Modal placeholder -->
+<div id="modal-placeholder-basidati"></div>
+
+
+@section Scripts {
+    <script>
+
+        $(document).ready(function () {
+            $('#tblbasidati').DataTable({
+                // Opzioni di configurazione
+                paging: false,          // Abilita la paginazione
+                searching: true,       // Abilita la ricerca
+                ordering: true
+            }
+            );
+                // Definisci il tipo di ordinamento personalizzato
+        $.fn.dataTable.ext.order['dom-checkbox'] = function(settings, col) {
+            return this.api().column(col, {order: 'index'}).nodes().map(function(td, i) {
+                return $(td).data('order');
+            });
+        };
+        });
+                $(function () {
+            var placeholderElement = $('#modal-placeholder-basidati');
+            $('button[data-toggle="ajax-modal-aggbasedati"]').click(function (event) {
+                var geturl = `${window.location.protocol}//${window.location.hostname}${window.location.port ? `:${window.location.port}` : ''}`;
+                var urldettaglio = '/BasiDati/IndexBasiDati?handler=AggiungiModalePartial';
+                geturl += urldettaglio;
+                $.get(geturl).done(function (data) {
+                    // append HTML to document, find modal and show it
+                    //$(document.body).append(data).find('.modal').modal('show');
+                    placeholderElement.html(data);
+                    placeholderElement.find('.modal').modal('show');
+                });
+            });
+        });
+
+        $(function () {
+            var placeholderElement = $('#modal-placeholder-basidati');
+            $('button[data-toggle="ajax-modal-modbasedati"]').click(function (event) {
+                var geturl = `${window.location.protocol}//${window.location.hostname}${window.location.port ? `:${window.location.port}` : ''}`;
+                var urldettaglio = '/BasiDati/IndexBasiDati?handler=AggiungiModalePartial';
+                geturl += urldettaglio;
+                const idbasedati = $(this).attr('data-idbasedati');
+                geturl += "&idbasedati=";
+                geturl += idbasedati;
+                $.get(geturl).done(function (data) {
+                    // append HTML to document, find modal and show it
+                    //$(document.body).append(data).find('.modal').modal('show');
+                    placeholderElement.html(data);
+                    placeholderElement.find('.modal').modal('show');
+                });
+            });
+        });
+
+
+        
+    </script>
+}
