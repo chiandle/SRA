@@ -17,6 +17,7 @@ namespace SRA.Pages.Attività
     [Authorize]
     public class AttivitàPersoneModel : PageModel
     {
+        //commento
         public Attivita Attività { get; set; } = new Attivita();
         public List<VW_AttivitàPersona> ListaAttivitàPersone { get; set; } = new List<Models.VW_AttivitàPersona>();
         public List<PersonaAssegnata> ListaPersone { get; set; } = new List<PersonaAssegnata>();
