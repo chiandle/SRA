@@ -103,31 +103,6 @@ namespace SRA.Pages.NSElencoAttività
 
             if (String.IsNullOrEmpty(AnnoSelezionato)) { AnnoSelezionato = DateTime.Now.Year.ToString(); }
 
-            #region Definizione query OLD-Style
-            var sqlquery = @"select  a.*,
-                    CAST(CASE 
-                    WHEN ap.IDPersona = '" + idpersona.ToString() + @"' THEN 1 
-                    ELSE 0 
-                END as bit) AS Assegnata 
-            from ElencoAttività a
-            left join (select distinct IDAttività, IDPersona from AttivitàPersone where IDPersona = '" + idpersona.ToString() + @"' ) ap on ap.IDAttività = a.ID
-            where 1=1
-            and (a.Cancellato = 0 or a.Cancellato is null)";
-            if (AnnoSelezionato != "1")
-            {
-                sqlquery = sqlquery + " and (YEAR(a.DataInizio) = '" + AnnoSelezionato + "' " +
-"or YEAR(a.DataFine) >=  '" + AnnoSelezionato + "')";
-            }
-            if (SoloPersonali)
-            {
-                sqlquery = sqlquery + @" and CAST(CASE 
-                    WHEN ap.IDPersona = '" + idpersona.ToString() + @"' THEN 1 
-                    ELSE 0 
-                END as bit) = 1";
-            }
-            #endregion
-
-
             // Query base con LINQ
             var query =
     from a in _context.ElencoAttività
@@ -171,21 +146,12 @@ namespace SRA.Pages.NSElencoAttività
             //    StrutturaSelezionata = UtenteCollegato.CodiceStruttura;
             //}
 
-            #region modifica Query OLD-STYLE
-            if (StrutturaSelezionata != "Tutte")
-            {
-                sqlquery = sqlquery + " and a.CodiceStruttura = '" + StrutturaSelezionata + "'";
-            }
-            #endregion
-
+            
 
             if (StrutturaSelezionata != "Tutte")
             {
                 query = query.Where(a => a.CodiceStruttura == StrutturaSelezionata);
             }
-            //ElencoAttività = _context.VW_ElencoAttività_Display
-            //    .FromSqlRaw(sqlquery)
-            //    .ToList();
 
             ElencoAttività = query.ToList();
 
@@ -279,6 +245,7 @@ namespace SRA.Pages.NSElencoAttività
             }
             else
             {
+                var attivitàoriginale = _context.ElencoAttività.AsNoTracking().Where(a => a.ID == model.Attività.ID).FirstOrDefault();
                 if (model.Attività.DataFine == DateTime.MinValue)
                 {
                     model.Attività.DataFine = DateTime.MaxValue;
@@ -291,7 +258,7 @@ namespace SRA.Pages.NSElencoAttività
                         ap.DataInizio = model.Attività.DataInizio;
                     }
 
-                    if (ap.DataFine >= model.Attività.DataFine)
+                    if (ap.DataFine > model.Attività.DataFine || ap.DataFine == attivitàoriginale.DataFine)
                     {
                         ap.DataFine = model.Attività.DataFine;
                     }

@@ -1,0 +1,75 @@
+﻿@page
+@model SRA.Pages.Attività.PromemoriaAttivitàModel
+@{
+}
+
+
+<div class="flex-container">
+    <div><h2>Promemoria delle Cose da Fare</h2></div>
+</div>
+<br />
+<table id="tblpromemoria" class="display table table-hover table-striped table-bordered table-sm">
+    <thead>
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.ListaWP[0].Nome)</th>
+            <th>@Html.DisplayNameFor(model => model.ListaWP[0].NomeAttività)</th>
+            <th>@Html.DisplayNameFor(model => model.ListaWP[0].DataFine)</th>
+            <th>@Html.DisplayNameFor(model => model.ListaWP[0].Completato)</th>
+            <th>@Html.DisplayNameFor(model => model.ListaWP[0].Descrizione)</th>
+            <th>@Html.DisplayNameFor(model => model.ListaWP[0].DataUltimaNotifica)</th>
+            <th></th>
+        </tr>
+    </thead>
+     <tbody>
+        @foreach (var item in Model.ListaWP)
+        {
+            <tr>
+            <td>@item.Nome</td>
+            <td>@item.NomeAttività</td>
+            <td>@item.DataFine.ToString("dd/MM/yyyy")</td>
+            <td>@(item.Completato ? "Sì" : "No")</td>
+            <td>@item.Descrizione</td>
+            <td>@(item.DataUltimaNotifica != DateTime.MinValue ? item.DataUltimaNotifica.ToString("dd/MM/yyyy") : "N/A")</td>
+                <td>@if (!item.Completato)
+                    {
+                        <form method="post" asp-page-handler="SegnaCompletato">
+                            <input type="hidden" name="idwp" value="@item.IDWP" />
+                            <button type="submit" class="btn btn-outline-success btn-sm">Completa</button>
+                        </form>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+ </table>
+
+@section Scripts {
+    <script>
+            $(document).ready(function () {
+            var table = $('#tblpromemoria').DataTable({
+                // Opzioni di configurazione
+                paging: false,          // Abilita la paginazione
+                searching: true,       // Abilita la ricerca
+                ordering: true,        // Abilita l'ordinamento delle colonne
+                order: [],
+                columnDefs: [
+            { targets: [3],
+              render: function (data, type, row) {
+          if (type === 'sort') {
+            return data === 'Sì' ? 1 : 0; // 1=Sì, 0=No
+          }
+          return data;
+        }
+            }
+        ]
+            })
+            })
+            ;
+
+                // Impedisci la propagazione dell'evento di clic sugli input
+        $('#tblattivita thead tr:eq(0) input').on('click', function(event) {
+            event.stopPropagation();
+        });
+    </script>
+
+}
